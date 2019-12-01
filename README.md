@@ -5,7 +5,7 @@ This program is organized into two distinct pieces:
 
 1) A Board class which handles the list of lists representation of our checkers board which includes handling piece movement and board displaying.
 
-2) A Game file which holds all the information necessary to run a game of Konane. This includes a Game class which is used as a game state node, the minimax with alpha-beta pruning algorithm for our computer player, a game playing function to initialize a game of Konane with a board setup passed in as a parameter.
+2) A Game file which holds all the information necessary to run a game of Konane. This includes a Game class which is used as a game state node, the minimax_function with alpha-beta pruning algorithm for our computer player, a game playing function to initialize a game of Konane with a board setup passed in as a parameter.
 
 ===Gameplay===
 
@@ -17,7 +17,7 @@ Then, depending on the start player, the computer or the player shall make a mov
 
 ===Algorithm===
 
-Konane with board represented as a matrix (python list of lists). Comes with a fully implemented minimax (with alpha-beta pruning) capable game-playing AI. The minimax with alpha-beta pruning has no other deviations from the base algorithm.
+Konane with board represented as a matrix (python list of lists). Comes with a fully implemented minimax_function (with alpha-beta pruning) capable game-playing AI. The minimax_function with alpha-beta pruning has no other deviations from the base algorithm.
 
-The static evaluation function for minimax simply calculates the number of moves the AI has minus the number of moves the player at that node and returns that value unless that node is a win-state or lose-state whereby it will give it a positive infinite value or a negative infinite value respectively.
+The static evaluation function for minimax_function simply calculates the number of moves the AI has minus the number of moves the player at that node and returns that value unless that node is a win-state or lose-state whereby it will give it a positive infinite value or a negative infinite value respectively.
 
