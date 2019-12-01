@@ -102,6 +102,7 @@ class Game:
 
         return list_of_next_states
 
+# TODO: Lenny continue code refactoring from this point...
     def player_turn(self):
         try:
             legal_moves = self.find_legal_moves(self.current_player)
