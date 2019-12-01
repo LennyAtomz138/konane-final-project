@@ -18,7 +18,7 @@ def minimax(game_state, alpha, beta, depth_bound):
         static_eval_count += 1
         return game_state.static_evaluation(), None  # it is irrelevant what we return int second slot
     elif game_state.current_player == 0:  # i.e is AI turn (max node)
-        bestmove = None
+        best_move = None
         minimax_calls += 1
         for successor_game_state in game_state.generate_successors():
             total_branches += 1
@@ -26,13 +26,13 @@ def minimax(game_state, alpha, beta, depth_bound):
             bv, player_move = minimax(successor_game_state, alpha, beta, depth_bound + 1)
             if bv > alpha:
                 alpha = bv
-                bestmove = successor_game_state.last_move_made
+                best_move = successor_game_state.last_move_made
             if alpha >= beta:
                 cutoffs += 1
-                return beta, bestmove
-        return alpha, bestmove
+                return beta, best_move
+        return alpha, best_move
     else:  # i.e looking at player turn (min node)
-        bestmove = None
+        best_move = None
         minimax_calls += 1
         for successor_game_state in game_state.generate_successors():
             total_branches += 1
@@ -40,11 +40,11 @@ def minimax(game_state, alpha, beta, depth_bound):
             bv, computer_move = minimax(successor_game_state, alpha, beta, depth_bound + 1)
             if bv < beta:
                 beta = bv
-                bestmove = successor_game_state.last_move_made
+                best_move = successor_game_state.last_move_made
             if beta <= alpha:
                 cutoffs += 1
-                return alpha, bestmove
-        return beta, bestmove
+                return alpha, best_move
+        return beta, best_move
 
 
 class Game:
@@ -74,12 +74,15 @@ class Game:
                             # now we are going to check for a double jump!
                             start = move[0]
                             cur_end = move[1]
+                            # Make a copy of the board, and then make the move on that board.
                             new_board = copy.deepcopy(
-                                self.board)  # Make a copy of the board, and then make the move on that board
+                                self.board)
                             new_board.movePiece(start, cur_end)
-                            continue_move = move_fn(cur_end)  # Try to move again in the same direction
+                            # Try to move again in the same direction.
+                            continue_move = move_fn(cur_end)
+                            # Make a whole new game state and check if our move is legal on that.
                             new_game_state = Game(self.board_size, new_board,
-                                                  current_player)  # make a whole new game state and check if our move is legal on that
+                                                  current_player)
                             while new_game_state.is_legal_move(current_player, continue_move):
                                 start_cur = cur_end
                                 cur_end = continue_move[1]
@@ -94,17 +97,18 @@ class Game:
         """ Given a move e.g ((8,8),(5,8)), check if that is legal, return true if it is, false otherwise """
         starting_pos = move[0]
         ending_pos = move[1]
+        # Discard any generated moves that fall off of the board.
         if ending_pos[0] not in range(self.board_size) or ending_pos[1] not in range(
-                self.board_size):  # Discard any generated moves that fall off of the board
+                self.board_size):
             return False
         if self.board.repr[starting_pos[0]][starting_pos[1]] != self.player_symbol[current_player]:
             print("this should never trigger and is redundant")
             return False
         if self.board.repr[ending_pos[0]][ending_pos[1]] != '.':  # Check that landing spot is empty
             return False
-        middle_pos = (starting_pos[0] - (starting_pos[0] - ending_pos[0]) / 2, starting_pos[1] - (
-                    starting_pos[1] - ending_pos[
-                1]) / 2)  # Check the middle spot is the other piece - this should in theory not matter because the pieces alternate
+        # Check the middle spot is the other piece - this should in theory not matter because the pieces alternate.
+        middle_pos = (starting_pos[0] - (starting_pos[0] - ending_pos[0]) / 2,
+                      starting_pos[1] - (starting_pos[1] - ending_pos[1]) / 2)
         other_player = 1 - current_player
         if self.board.repr[middle_pos[0]][middle_pos[1]] != self.player_symbol[other_player]:
             return False
@@ -127,13 +131,12 @@ class Game:
             print(legal_moves)
             if len(legal_moves) != 0:
                 is_valid_input = False
-                while is_valid_input == False:
+                while not is_valid_input:
                     move_coordinates = (input("Please enter start coordinate: "),
                                         input("Please enter end coordinate: "))  # should be two tuples entered
-                    actual_move_coordinates = ((move_coordinates[0][0] - 1, move_coordinates[0][1] - 1), (
-                    move_coordinates[1][0] - 1, move_coordinates[1][
-                        1] - 1))  # to convert user input (which is 1 indexed) to 0 indexed (which our board
-                    # representation is in)
+                    # To convert user input (which is 1 indexed) to 0 indexed (which our board representation is in)
+                    actual_move_coordinates = ((move_coordinates[0][0] - 1, move_coordinates[0][1] - 1),
+                                               (move_coordinates[1][0] - 1, move_coordinates[1][1] - 1))
                     is_valid_input = actual_move_coordinates in legal_moves
                 self.board.movePiece(actual_move_coordinates[0], actual_move_coordinates[1])
                 print(self.board)
