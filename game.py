@@ -19,10 +19,11 @@ class Game:
         self.finalize_game = 0
 
     def find_legal_moves(self, current_player):
-        """ Returns a list of of legal moves, as tuple of tuples e.g [((5,5),(4,6)),...] """
+        """ Returns a list of of legal moves, as tuple of tuples e.g [((5,5),(4,6)),...]. """
         legal_moves_list = []
         for row in range(self.size_of_board):
             for column in range(self.size_of_board):
+
                 # Note that .repr is used to here to limit the size of the search scope.
                 if self.konane_board.repr[row][column] == self.player_symbol[current_player]:
                     current_position = (row, column)
@@ -32,6 +33,7 @@ class Game:
                          self.downward_move,
                          self.leftward_move]
                     for possible_move in list_of_possible_moves:
+
                         current_move = possible_move(current_position)
                         if self.determine_move_legality(current_player, current_move):
                             legal_moves_list.append(current_move)
@@ -45,6 +47,7 @@ class Game:
                             copied_board.move_konane_stone(begin_scan, end_of_current_scan)
                             # Try to current_move again in the same direction.
                             continue_move_scan = possible_move(end_of_current_scan)
+
                             # Instantiate an experimental game state and ensure that current move is still legal there.
                             experimental_game_state = Game(self.size_of_board, copied_board, current_player)
                             while experimental_game_state.determine_move_legality(current_player, continue_move_scan):
@@ -58,54 +61,65 @@ class Game:
                                                                copied_board, current_player)
         return legal_moves_list
 
-    def determine_move_legality(self, current_player, move):
-        """ Given a move e.g ((8,8),(5,8)), check if that is legal, return true if it is, false otherwise """
-        starting_pos = move[0]
-        ending_pos = move[1]
-        # Discard any generated moves that fall off of the konane_board.
-        if ending_pos[0] not in range(self.size_of_board) or ending_pos[1] not in range(
-                self.size_of_board):
+    def determine_move_legality(self, current_player, current_move_pair):
+        """ Given a current_move_pair e.g ((5,5),(4,6)), determine its legality: return True or False respectively. """
+        initial_position = current_move_pair[0]
+        final_position = current_move_pair[1]
+
+        # Remove potential moves that would place the stone out of the bounds of the board:
+        if final_position[0] not in range(self.size_of_board) or final_position[1] not in range(self.size_of_board):
             return False
-        if self.konane_board.repr[starting_pos[0]][starting_pos[1]] != self.player_symbol[current_player]:
-            print("this should never trigger and is redundant")
+
+        # Ensure that the landing point is empty:
+        if self.konane_board.repr[final_position[0]][final_position[1]] != '.':
             return False
-        if self.konane_board.repr[ending_pos[0]][ending_pos[1]] != '.':  # Check that landing spot is empty
+
+        # Ensure that the player is the legal player:
+        if self.konane_board.repr[initial_position[0]][initial_position[1]] != self.player_symbol[current_player]:
+            print("Somehow, this player is not the legal player for this move.")
             return False
-        # Check the middle spot is the other piece - this should in theory not matter because the pieces alternate.
-        middle_pos = (starting_pos[0] - (starting_pos[0] - ending_pos[0]) / 2,
-                      starting_pos[1] - (starting_pos[1] - ending_pos[1]) / 2)
-        other_player = 1 - current_player
-        if self.konane_board.repr[middle_pos[0]][middle_pos[1]] != self.player_symbol[other_player]:
+
+        # Ensure that the midpoint between the initial and final positions is the opponent's stone:
+        midpoint_position = (initial_position[0] - (initial_position[0] - final_position[0]) / 2,
+                             initial_position[1] - (initial_position[1] - final_position[1]) / 2)
+        opponent = 1 - current_player
+        if self.konane_board.repr[midpoint_position[0]][midpoint_position[1]] != self.player_symbol[opponent]:
             return False
+
         return True
 
     def generate_next_state(self):
-        successors = []
-        for move in self.find_legal_moves(self.current_player):
-            boardCopy = copy.deepcopy(self.konane_board)
-            boardCopy.move_konane_stone(move[0], move[1])
-            successors.append(Game(self.size_of_board, boardCopy, 1 - self.current_player, move))
-        for s in successors:
+        list_of_next_states = []
+
+        for legal_move in self.find_legal_moves(self.current_player):
+            board_deep_copy = copy.deepcopy(self.konane_board)
+            board_deep_copy.move_konane_stone(legal_move[0], legal_move[1])
+            list_of_next_states.append(Game(self.size_of_board, board_deep_copy, 1 - self.current_player, legal_move))
+
+        for valid_state in list_of_next_states:
             if False:
-                print(s.board)
-        return successors
+                print(valid_state.board)
+
+        return list_of_next_states
 
     def player_turn(self):
         try:
             legal_moves = self.find_legal_moves(self.current_player)
             print(legal_moves)
             if len(legal_moves) != 0:
-                is_valid_input = False
-                while not is_valid_input:
-                    move_coordinates = (input("Please enter start coordinate: "),
-                                        input("Please enter end coordinate: "))  # should be two tuples entered
-                    # To convert user input (which is 1 indexed) to 0 indexed (which our konane_board representation is in)
-                    actual_move_coordinates = ((move_coordinates[0][0] - 1, move_coordinates[0][1] - 1),
-                                               (move_coordinates[1][0] - 1, move_coordinates[1][1] - 1))
-                    is_valid_input = actual_move_coordinates in legal_moves
-                self.konane_board.move_konane_stone(actual_move_coordinates[0], actual_move_coordinates[1])
+                is_current_input_valid = False
+                while not is_current_input_valid:
+                    # Game will prompt user for two tuples as input:
+                    movement_coordinates = (input("Input starting coordinates: "),
+                                            input("Input ending coordinate: "))
+                    # Revert coordinates to 0-indexed representation in order to align with Konane board configuration.
+                    zero_indexed_movement_coordinates = (
+                        (movement_coordinates[0][0] - 1, movement_coordinates[0][1] - 1),
+                        (movement_coordinates[1][0] - 1, movement_coordinates[1][1] - 1))
+                    is_current_input_valid = zero_indexed_movement_coordinates in legal_moves
+                self.konane_board.move_konane_stone(zero_indexed_movement_coordinates[0], zero_indexed_movement_coordinates[1])
                 print(self.konane_board)
-                self.previously_selected_move = move_coordinates
+                self.previously_selected_move = movement_coordinates
                 self.current_player = 1 - self.current_player
             else:
                 self.finalize_game = 1
@@ -116,7 +130,7 @@ class Game:
             print("You messed up, you dingus")
             self.player_turn()
 
-    def computer_turn(self):
+    def opponent_turn(self):
         global number_of_minimax_calls
         if len(self.find_legal_moves(self.current_player)) != 0:
             computer_move = minimax_function(self, float("-inf"), float("inf"), 0)
@@ -221,9 +235,9 @@ def play_game(game_state):
     game_state.board.removePiece((to_remove[0] - 1, to_remove[1] - 1))
     while game_state.endgame != 1:
         if game_state.current_player == 0:
-            game_state.computer_turn()
+            game_state.opponent_turn()
         else:
-            game_state.computer_turn()
+            game_state.opponent_turn()
 
 
 def test_game(game_state):
@@ -233,9 +247,9 @@ def test_game(game_state):
     print(game_state.board)
     while game_state.endgame != 1:
         if game_state.current_player == 0:
-            game_state.computer_turn()
+            game_state.opponent_turn()
         else:
-            game_state.computer_turn()
+            game_state.opponent_turn()
 
 
 if __name__ == '__main__':
