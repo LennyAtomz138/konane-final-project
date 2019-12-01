@@ -18,44 +18,47 @@ class Game:
         self.player_symbol = ('Black Stone', 'White Stone')
         self.finalize_game = 0
 
-    def get_legal_moves(self, current_player):
-        """ Returns a list of of legal moves, as pairs of pairs e.g [((8,8),(5,8)),...] """
-        legal_moves = []
+    def find_legal_moves(self, current_player):
+        """ Returns a list of of legal moves, as tuple of tuples e.g [((5,5),(4,6)),...] """
+        legal_moves_list = []
         for row in range(self.size_of_board):
-            for col in range(self.size_of_board):
-                if self.konane_board.repr[row][col] == self.player_symbol[current_player]:
-                    position = (row, col)
-                    move_fn_list = [self.north_move,
-                                    self.east_move,
-                                    self.south_move,
-                                    self.west_move]
-                    for move_fn in move_fn_list:
-                        move = move_fn(position)
-                        if self.is_legal_move(current_player, move):
-                            legal_moves.append(move)
-                            # now we are going to check for a double jump!
-                            start = move[0]
-                            cur_end = move[1]
-                            # Make a copy of the konane_board, and then make the move on that konane_board.
-                            new_board = copy.deepcopy(
-                                self.konane_board)
-                            new_board.movePiece(start, cur_end)
-                            # Try to move again in the same direction.
-                            continue_move = move_fn(cur_end)
-                            # Make a whole new game state and check if our move is legal on that.
-                            new_game_state = Game(self.size_of_board, new_board,
-                                                  current_player)
-                            while new_game_state.is_legal_move(current_player, continue_move):
-                                start_cur = cur_end
-                                cur_end = continue_move[1]
-                                legal_moves.append((start, cur_end))
-                                new_board = copy.deepcopy(new_board)
-                                new_board.movePiece(start_cur, cur_end)
-                                continue_move = move_fn(cur_end)
-                                new_game_state = Game(new_game_state.size_of_board, new_board, current_player)
-        return legal_moves
+            for column in range(self.size_of_board):
+                # Note that .repr is used to here to limit the size of the search scope.
+                if self.konane_board.repr[row][column] == self.player_symbol[current_player]:
+                    current_position = (row, column)
+                    list_of_possible_moves = \
+                        [self.upward_move,
+                         self.rightward_move,
+                         self.downward_move,
+                         self.leftward_move]
+                    for possible_move in list_of_possible_moves:
+                        current_move = possible_move(current_position)
+                        if self.determine_move_legality(current_player, current_move):
+                            legal_moves_list.append(current_move)
+                            # Next, scan for the possibility of a double-jump.
+                            begin_scan = current_move[0]
+                            end_of_current_scan = current_move[1]
+                            # Utilize a copy of the Konane board for a test run of the scanned move.
+                            # Note that copy.deepcopy() is used here in order to keep a table of objects that have
+                            # already been copied during a given copying pass.
+                            copied_board = copy.deepcopy(self.konane_board)
+                            copied_board.move_konane_stone(begin_scan, end_of_current_scan)
+                            # Try to current_move again in the same direction.
+                            continue_move_scan = possible_move(end_of_current_scan)
+                            # Instantiate an experimental game state and ensure that current move is still legal there.
+                            experimental_game_state = Game(self.size_of_board, copied_board, current_player)
+                            while experimental_game_state.determine_move_legality(current_player, continue_move_scan):
+                                current_start_position = end_of_current_scan
+                                end_of_current_scan = continue_move_scan[1]
+                                legal_moves_list.append((begin_scan, end_of_current_scan))
+                                copied_board = copy.deepcopy(copied_board)
+                                copied_board.move_konane_stone(current_start_position, end_of_current_scan)
+                                continue_move_scan = possible_move(end_of_current_scan)
+                                experimental_game_state = Game(experimental_game_state.size_of_board,
+                                                               copied_board, current_player)
+        return legal_moves_list
 
-    def is_legal_move(self, current_player, move):
+    def determine_move_legality(self, current_player, move):
         """ Given a move e.g ((8,8),(5,8)), check if that is legal, return true if it is, false otherwise """
         starting_pos = move[0]
         ending_pos = move[1]
@@ -78,9 +81,9 @@ class Game:
 
     def generate_next_state(self):
         successors = []
-        for move in self.get_legal_moves(self.current_player):
+        for move in self.find_legal_moves(self.current_player):
             boardCopy = copy.deepcopy(self.konane_board)
-            boardCopy.movePiece(move[0], move[1])
+            boardCopy.move_konane_stone(move[0], move[1])
             successors.append(Game(self.size_of_board, boardCopy, 1 - self.current_player, move))
         for s in successors:
             if False:
@@ -89,7 +92,7 @@ class Game:
 
     def player_turn(self):
         try:
-            legal_moves = self.get_legal_moves(self.current_player)
+            legal_moves = self.find_legal_moves(self.current_player)
             print(legal_moves)
             if len(legal_moves) != 0:
                 is_valid_input = False
@@ -100,7 +103,7 @@ class Game:
                     actual_move_coordinates = ((move_coordinates[0][0] - 1, move_coordinates[0][1] - 1),
                                                (move_coordinates[1][0] - 1, move_coordinates[1][1] - 1))
                     is_valid_input = actual_move_coordinates in legal_moves
-                self.konane_board.movePiece(actual_move_coordinates[0], actual_move_coordinates[1])
+                self.konane_board.move_konane_stone(actual_move_coordinates[0], actual_move_coordinates[1])
                 print(self.konane_board)
                 self.previously_selected_move = move_coordinates
                 self.current_player = 1 - self.current_player
@@ -115,13 +118,13 @@ class Game:
 
     def computer_turn(self):
         global number_of_minimax_calls
-        if len(self.get_legal_moves(self.current_player)) != 0:
+        if len(self.find_legal_moves(self.current_player)) != 0:
             computer_move = minimax_function(self, float("-inf"), float("inf"), 0)
             computer_move = computer_move[1]
             print("FROM BOARD:")
             print(self.konane_board)
             if computer_move is not None:
-                self.konane_board.movePiece(computer_move[0], computer_move[1])
+                self.konane_board.move_konane_stone(computer_move[0], computer_move[1])
                 print(self.konane_board)
                 print("Made move: ", (
                     (computer_move[0][0] + 1, computer_move[0][1] + 1),
@@ -129,8 +132,8 @@ class Game:
                 self.previously_selected_move = computer_move
                 self.current_player = 1 - self.current_player
             else:
-                random_move = random.choice(self.get_legal_moves(self.current_player))
-                self.konane_board.movePiece(random_move[0], random_move[1])
+                random_move = random.choice(self.find_legal_moves(self.current_player))
+                self.konane_board.move_konane_stone(random_move[0], random_move[1])
                 print(self.konane_board)
                 print("Made move: ", ((random_move[0][0] + 1, random_move[0][1] + 1), (
                     random_move[1][0] + 1, random_move[1][1] + 1)))  # to present the computer's move nicely to player
@@ -141,24 +144,24 @@ class Game:
             print("Player", self.player_symbol[self.current_player], "loses!")
 
     @staticmethod
-    def north_move(pos):
+    def upward_move(pos):
         return pos, (pos[0] - 2, pos[1])
 
     @staticmethod
-    def east_move(pos):
+    def rightward_move(pos):
         return pos, (pos[0], pos[1] + 2)
 
     @staticmethod
-    def south_move(pos):
+    def downward_move(pos):
         return pos, (pos[0] + 2, pos[1])
 
     @staticmethod
-    def west_move(pos):
+    def leftward_move(pos):
         return pos, (pos[0], pos[1] - 2)
 
     def static_evaluation(self):
-        my_moves = self.get_legal_moves(0)
-        opponent_moves = self.get_legal_moves(1)
+        my_moves = self.find_legal_moves(0)
+        opponent_moves = self.find_legal_moves(1)
         if opponent_moves == 0:
             return float("inf")
         if my_moves == 0:

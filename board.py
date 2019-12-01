@@ -33,7 +33,7 @@ class Board:
             rowNumber += 1
         return display
 
-    def movePiece(self, from_pos, to_pos):  # Assuming from_pos and to_pos are coordinate tuples
+    def move_konane_stone(self, from_pos, to_pos):  # Assuming from_pos and to_pos are coordinate tuples
         """ Modifies the game board when moving pieces """
         moved_piece = self.repr[from_pos[0]][
             from_pos[1]]  # Saves the type of the piece we are moving (whether it is "X" or "O")
