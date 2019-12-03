@@ -35,7 +35,13 @@ class Board:
 
     def __add__(self, next_move):
         assert isinstance(next_move, move.Move)
-        # TODO: clone board & apply move to new board
+        next_board = Board()
+        next_board._board = [row[:] for row in self._board]
+        for piece in next_move.added():
+            next_board._board[piece.row()][piece.col()] = True
+        for piece in next_move.removed():
+            next_board._board[piece.row()][piece.col()] = False
+        return next_board
 
 class Cell:
     def __init__(self, board, coord, occupied):
@@ -52,6 +58,12 @@ class Cell:
     def coord(self):
         return (self._row, self._col)
 
+    def row(self):
+        return self._row
+    
+    def col(self):
+        return self._col
+
     def neighbor(self, v_row, v_col):
         if not Cell.valid(self._row + v_row, self._col + v_col):
             raise IndexError
@@ -59,6 +71,9 @@ class Cell:
     
     def __add__(self, direction):
         return self.neighbor(*direction)
+    
+    def __sub__(self, other):
+        return (self._row - other._row, self._col - other._col)
     
     @classmethod
     def valid(cls, row, col):
