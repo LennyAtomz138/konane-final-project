@@ -1,5 +1,5 @@
 import board
-from board import Board
+from board import (Board, Color)
 from move import (Move, InitialMove)
 
 # Maintains a game state, i.e. a snapshot of the game in time
@@ -25,7 +25,11 @@ class State:
         if self._board.n_removed() == 1:
             return self._secondmove()
         return self._moves()
-    
+
+    def __add__(self, next_move):
+        next_color = (Color.white if self._color == Color.black else Color.black)
+        return State(self._board + next_move, next_color)
+
     def _firstmove(self):
         a = 0
         b = Board.__size-1
