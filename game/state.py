@@ -2,6 +2,9 @@ import board
 from board import Board
 from move import (Move, InitialMove)
 
+# Maintains a game state, i.e. a snapshot of the game in time
+# Contains a board state and the color of the current player.
+# Get a generator of available moves with State#moves()
 class State:
     def __init__(self, board, color):
         self._board = board
@@ -13,6 +16,9 @@ class State:
     def color(self):
         return self._color
     
+    def is_loss(self):
+        return next(self.moves(), None) == None
+
     def moves(self):
         if self._board.n_removed() == 0:
             return self._firstmove()

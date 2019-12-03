@@ -1,3 +1,4 @@
+# Gives an agent the ability to select the next move given a game state
 class Player:
     def __init__(self, color):
         self._color = color
@@ -13,6 +14,8 @@ class AIPlayer(Player):
         # recursively
         for move in state.moves():
             pass
+    def _evaluate_state(self, state):
+        pass
 
 class NetworkPlayer(Player):
     def next_move(self, state):
