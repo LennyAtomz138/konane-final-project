@@ -1,6 +1,5 @@
-import board
-from board import (Board, Color)
-from move import (Move, InitialMove)
+from .board import (Board, Color, Direction)
+from .move import (Move, InitialMove)
 
 # Maintains a game state, i.e. a snapshot of the game in time
 # Contains a board state and the color of the current player.
@@ -36,8 +35,8 @@ class State:
 
     def _firstmove(self):
         a = 0
-        b = Board.__size-1
-        c = Board.__size / 2
+        b = Board.size-1
+        c = Board.size // 2
         d = c - 1
         candidates = [
             (a,a), (a,b), (b,a), (b,b),
@@ -47,16 +46,17 @@ class State:
             yield InitialMove(self._board[cell])
 
     def _secondmove(self):
-        hole = [self._board.cells(removed_only=True)][0]
-        for direction in board.Direction:
+        hole = list(self._board.cells(removed_only=True))[0]
+        for direction in Direction:
             try:
-                yield InitialMove(hole + direction)
+                yield InitialMove(hole + direction.value)
             except IndexError:
                 pass
 
     def _moves(self):
         for cell in self._board.cells(occupied_only=True, color=self._color):
-            for direction in board.Direction:
+            for direction in Direction:
+                direction = direction.value
                 ptr = cell
                 try:
                     while (ptr + direction).occupied() and not (ptr + direction + direction).occupied():
@@ -67,4 +67,4 @@ class State:
                     pass
     
     def __str__(self):
-        return f'{self._board}\n{self.color}'
+        return f'{self._board}\n{self._color.name}'

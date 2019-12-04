@@ -9,12 +9,15 @@ class Move:
     def removed(self):
         d = self._end - self._start
         dist = abs(sum(d))
-        v = (d[0]/dist, d[1]/dist)
+        v = (d[0]//dist, d[1]//dist)
         result = [self._start]
         ptr = self._start + v
-        while len(result) < dist / 2:
-            result.append(ptr)
-            ptr = ptr + v + v
+        try:
+            while len(result) <= dist / 2:
+                result.append(ptr)
+                ptr = ptr + v + v
+        except IndexError:
+            pass
         return result
 
     def __str__(self):

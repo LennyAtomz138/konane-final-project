@@ -1,5 +1,5 @@
-from board import Board
-from state import State
+from .board import Board
+from .state import State
 
 class Game:
     def __init__(self, p0, p1):
@@ -7,15 +7,12 @@ class Game:
         self._state = State(Board())
         self._player = 0
 
-    def __next__(self):
+    def __iter__(self):
         while not self._state.is_loss():
             move = self._p[self._player].next_move(self._state)
             yield move
             self._state = self._state + move
             self._player = [1,0][self._player]
-    
-    def __iter__(self):
-        return self
 
     def player(self, index):
         return self._p[index]

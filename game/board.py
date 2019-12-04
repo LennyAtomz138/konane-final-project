@@ -1,11 +1,11 @@
 import enum
-import move
+from .move import Move
 
 class Board:
-    __size = 18
+    size = 18
 
     def __init__(self):
-        self._board = [[True] * Board.__size] * Board.__size
+        self._board = [[True] * Board.size] * Board.size
     
     def __getitem__(self, index):
         if index.__class__ == int:
@@ -14,16 +14,16 @@ class Board:
             return Cell(self, index, self._board[index[0]][index[1]])
         raise TypeError
 
-    def cells(self, occupied_only=False, removed_only=False, color=Color.nocolor):
+    def cells(self, occupied_only=False, removed_only=False, color=None):
         assert not (occupied_only and removed_only)
-        for row in range(Board.__size):
-            for col in range(Board.__size):
+        for row in range(Board.size):
+            for col in range(Board.size):
                 cell = Cell(self, (row, col), self._board[row][col])
                 if occupied_only and not cell.occupied():
                     continue
                 if removed_only and cell.occupied():
                     continue
-                if color != Color.nocolor and cell.color() != color:
+                if color is not None and cell.color() != color:
                     continue
                 yield cell
 
@@ -31,10 +31,10 @@ class Board:
         return sum(sum(row) for row in self._board)
     
     def n_removed(self):
-        return (Board.__size ** 2) - self.n_occupied()
+        return (Board.size ** 2) - self.n_occupied()
 
     def __add__(self, next_move):
-        assert isinstance(next_move, move.Move)
+        assert isinstance(next_move, Move)
         next_board = Board()
         next_board._board = [row[:] for row in self._board]
         for piece in next_move.added():
@@ -44,14 +44,14 @@ class Board:
         return next_board
     
     def __str__(self):
-        cells = [['-'] * Board.__size] * Board.__size
+        cells = [['-'] * Board.size for _ in range(Board.size)]
         for c in self.cells(occupied_only=True):
             cells[c.row()][c.col()] = {
-                Color.white: 'X',
-                Color.black: 'O',
+                Color.white: '□',
+                Color.black: '■',
                 Color.nocolor: '?'
             }[c.color()]
-        return '\n'.join(' '.join(row) for row in cells)
+        return '\n'.join(f'{idx+1:>2} ' + ' '.join(row) for (idx, row) in reversed(list(enumerate(cells)))) + '\n-- ' + ' '.join(chr(c) for c in range(97, 97+Board.size))
 
 class Cell:
     def __init__(self, board, coord, occupied):
@@ -86,11 +86,11 @@ class Cell:
         return (self._row - other._row, self._col - other._col)
 
     def __str__(self):
-        return f'({self._row + 1}, {chr(self._col + ord('a'))})'
+        return f'({self._row + 1}, {chr(self._col + 97)})'
     
     @classmethod
     def valid(cls, row, col):
-        return (0 <= row < Board.__size) and (0 <= col < Board.__size)
+        return (0 <= row < Board.size) and (0 <= col < Board.size)
 
 class Color(enum.IntEnum):
     white = 0

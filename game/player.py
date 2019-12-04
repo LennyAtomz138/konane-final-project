@@ -23,11 +23,11 @@ class HumanPlayer(Player):
         self._name = name
     
     def next_move(self, state):
-        moves = [state.moves()]
+        moves = list(state.moves())
         print(f'*** {self._name}\'s move ***')
         print(state)
         print('*** Moves ***')
-        print('\n'.join(enumerate(moves)))
+        print('\n'.join(map(str, enumerate(map(str, moves)))))
         index = int(input('Move: '))
         return moves[index]
     
