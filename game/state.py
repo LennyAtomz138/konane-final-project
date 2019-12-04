@@ -65,3 +65,6 @@ class State:
                         ptr = destination
                 except IndexError:
                     pass
+    
+    def __str__(self):
+        return f'{self._board}\n{self.color}'

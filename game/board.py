@@ -42,6 +42,16 @@ class Board:
         for piece in next_move.removed():
             next_board._board[piece.row()][piece.col()] = False
         return next_board
+    
+    def __str__(self):
+        cells = [['-'] * Board.__size] * Board.__size
+        for c in self.cells(occupied_only=True):
+            cells[c.row()][c.col()] = {
+                Color.white: 'X',
+                Color.black: 'O',
+                Color.nocolor: '?'
+            }[c.color()]
+        return '\n'.join(' '.join(row) for row in cells)
 
 class Cell:
     def __init__(self, board, coord, occupied):
@@ -74,15 +84,18 @@ class Cell:
     
     def __sub__(self, other):
         return (self._row - other._row, self._col - other._col)
+
+    def __str__(self):
+        return f'({self._row + 1}, {chr(self._col + ord('a'))})'
     
     @classmethod
     def valid(cls, row, col):
         return (0 <= row < Board.__size) and (0 <= col < Board.__size)
 
 class Color(enum.IntEnum):
-    nocolor = 0
+    white = 0
     black = 1
-    white = 2
+    nocolor = 2
 
 class Direction(enum.Enum):
     left = (0, -1)
