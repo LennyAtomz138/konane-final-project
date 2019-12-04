@@ -6,7 +6,7 @@ from move import (Move, InitialMove)
 # Contains a board state and the color of the current player.
 # Get a generator of available moves with State#moves()
 class State:
-    def __init__(self, board, color):
+    def __init__(self, board, color=Color.nocolor):
         self._board = board
         self._color = color
 
@@ -27,7 +27,11 @@ class State:
         return self._moves()
 
     def __add__(self, next_move):
-        next_color = (Color.white if self._color == Color.black else Color.black)
+        c = self._color
+        if self._color == Color.nocolor:
+            assert isinstance(next_move, InitialMove)
+            c = next_move.removed()[0].color()
+        next_color = (Color.white if c == Color.black else Color.black)
         return State(self._board + next_move, next_color)
 
     def _firstmove(self):
