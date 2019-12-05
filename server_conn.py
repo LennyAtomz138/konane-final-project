@@ -30,7 +30,7 @@ while True:
         tn.write(input("Remove: ").encode('ascii') + b"\r\n")
         flag = True
 
-    if flag && "Move" in str(res, "utf-8"):
+    if flag && "?Move" in str(res, "utf-8"):
         tn.write(input("Move: ").encode('ascii') + b"\r\n")
 
     if "Error:" in str(res, "utf-8"):
