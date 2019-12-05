@@ -6,13 +6,12 @@ tn = telnetlib.Telnet('artemis.engr.uconn.edu', '4705')
 print("Connected")
 
 tn.read_until(b"?Username:")
-#name = str(input('Username:'))
-tn.write(b"42069\r\n")
+name = str(input('Username:'))
+tn.write(name.encode('ascii') + b"\r\n")
 
 tn.read_until(b"?Password:")
 #pwd = str(input('Password:'))
-#pwd.encode('ascii') +
-tn.write(b"42069\r\n")
+tn.write(name.encode('ascii') + b"\r\n")
 
 tn.read_until(b"?Opponent:")
 choice = str(input('Opponent:'))
