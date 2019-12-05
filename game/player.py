@@ -15,13 +15,16 @@ class AIPlayer(Player):
         pass
 
 class NetworkPlayer(Player):
+    def __init__(self, connection):
+        self.tn = connection
+        
     def next_move(self, state):
         pass
 
 class HumanPlayer(Player):
     def __init__(self, name):
         self._name = name
-    
+
     def next_move(self, state):
         moves = list(state.moves())
         print(f'*** {self._name}\'s move ***')
@@ -30,6 +33,6 @@ class HumanPlayer(Player):
         print('\n'.join(map(str, enumerate(map(str, moves)))))
         index = int(input('Move: '))
         return moves[index]
-    
+
     def __str__(self):
         return self._name
