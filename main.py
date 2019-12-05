@@ -16,8 +16,6 @@ if __name__ == '__main__':
             g = Game(p0, p1)
         elif(first == "2"):
             g = Game(p1,p0)
-        else:
-            break
         winner = g.run_all()
         print(winner)
     elif (choice == "2"):
