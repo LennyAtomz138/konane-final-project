@@ -5,7 +5,7 @@ import telnetlib
 
 if __name__ == '__main__':
 
-    print("\nSelect type of game for the AI to play:\n\t1)Human Player\n\t2)Server Player\n\t3)Itself")
+    print("\nSelect type of game for the AI to play:\n\t1)Human Player\n\t2)Server Player\n\t3)Itself\n\t4)Human vs Human")
     choice = input("--> ")
     if (choice == "1"):
         print("\nWho goes first?\n\t1)You\n\t2)AI")
@@ -47,6 +47,12 @@ if __name__ == '__main__':
     elif (choice == "3"):
         p0 = AIPlayer()
         p1 = AIPlayer()
+        g = Game(p0, p1)
+        winner = g.run_all()
+        print(winner)
+    elif (choice == "4"):
+        p0 = HumanPlayer('Player 0')
+        p1 = HumanPlayer('Player 1')
         g = Game(p0, p1)
         winner = g.run_all()
         print(winner)
