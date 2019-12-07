@@ -9,17 +9,28 @@ def encode_for_server(arg):
     #recieves 'Remove (int, char)' or '(int, char) -> (int, char)'
     if '->' in arg: # not first move
         res = arg.split('->')
-        return "["+str(int(res[0][1])-1)+":"+cols.index(res[0][4])+"]"+":"+"["+str(int(res[1][1])-1)+":"+cols.index(res[1][4])+"]"
+        print("Moving encoding:")
+        print(res)
+        return "["+str(int(res[0][1])-1)+":"+str(cols.index(res[0][4]))+"]"+":"+"["+str(int(res[1][2])-1)+":"+str(cols.index(res[1][5]))+"]"
     else:
         res = arg[7:]
+        print("Removing encoding:")
         print(res)
-        return "["+str(int(res[1])-1)+":"+cols.index(res[4])+"]"
+        return "["+str(int(res[1])-1)+":"+str(cols.index(res[4]))+"]"
 
 def decode_from_server(arg):
     if ']:[' in arg: #not first move
-        return #() -> () format
+        #[2:0]:[0:0]
+        print("Moving decoding:")
+        print(arg)
+        res = arg[4:]
+        return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+") -> (" +str(int(res[7])+1)+", "+cols[int(res[9])]+")"
     else:
-        return # ()
+        print("Removing decoding:")
+        print(arg)
+        #Removed:[0:0]
+        res = arg[1][8:]
+        return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+")"
 
 class AIPlayer(Player):
     def __init__(self, connection = None):
@@ -44,7 +55,7 @@ class AIPlayer(Player):
         ################################################
 
         #Uses index to find the chosen move, converts it to server format, and sends it
-        if (self.connection is not None):
+        if (self.tn is not None):
             options = []
             for i in moves:
                 options.append(str(i))
@@ -56,7 +67,7 @@ class AIPlayer(Player):
         pass
 
 class NetworkPlayer(Player):
-    def __init__(self, connection, start = ''):
+    def __init__(self, connection, start = None):
         self.tn = connection
         self._name = "Server Opponent"
         self.first = start
@@ -71,15 +82,27 @@ class NetworkPlayer(Player):
         print(f'*** {self._name}\'s move ***')
         print(state)
         #Checks if we are first (0) or second (1) to move
-        if (self.flag):
+        if (self.flag and self.first is not None):
             #get first remove from the network and play that
-            print(self.first)
             res = self.first.split('\n')
-            op_move = res[1]
+            print(res)
+            op_move = res
             self.flag = False
         else:
-            op_move = self.tn.read_some()
-            print(str(op_move, "utf-8"))
+            while True:
+                stri = self.tn.read_some()
+                serv = str(stri, "utf-8")
+                print(serv)
+                if "Error:" in serv:
+                    return None
+                if "win" in serv:
+                    return None
+                #if "Remove" in op_move and self.flag:
+
+                if "Move" in serv:
+                    print(serv)
+                    op_move = serv#.split('\n')
+                    break
 
         ####Convert server choice to our game's move format
         choice = decode_from_server(op_move)
