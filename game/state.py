@@ -1,6 +1,7 @@
 from .board import (Board, Color, Direction)
 from .move import (Move, InitialMove)
 
+
 # Maintains a game state, i.e. a snapshot of the game in time
 # Contains a board state and the color of the current player.
 # Get a generator of available moves with State#moves()

@@ -2,10 +2,13 @@ import pickle
 import math
 
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
+
+
 # Gives an agent the ability to select the next move given a game state
 class Player:
     def next_move(self, state):
         raise NotImplementedError
+
 
 def encode_for_server(arg):
     #recieves 'Remove (int, char)' or '(int, char) -> (int, char)'
@@ -20,6 +23,7 @@ def encode_for_server(arg):
         print(res)
         return "["+str(int(res[1])-1)+":"+str(cols.index(res[4]))+"]"
 
+
 def decode_from_server(arg):
     if ']:[' in arg: #not first move
         #[2:0]:[0:0]
@@ -33,6 +37,7 @@ def decode_from_server(arg):
         #Removed:[0:0]
         res = arg[1][8:]
         return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+")"
+
 
 # Gets next move via Minimax and knowledge base
 class AIPlayer(Player):
@@ -89,6 +94,7 @@ class AIPlayer(Player):
     def _evaluate_state(self, state):
         pass
 
+
 # Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start = None):
@@ -105,9 +111,9 @@ class NetworkPlayer(Player):
         op_move = ''
         print(f'*** {self._name}\'s move ***')
         print(state)
-        #Checks if we are first (0) or second (1) to move
-        if (self.flag and self.first is not None):
-            #get first remove from the network and play that
+        #  Checks if we are first (0) or second (1) to move
+        if self.flag and self.first is not None:
+            #  Get first remove from the network and play that
             res = self.first.split('\n')
             print(res)
             op_move = res
@@ -121,25 +127,26 @@ class NetworkPlayer(Player):
                     return None
                 if "win" in serv:
                     return None
-                #if "Remove" in op_move and self.flag:
+                #  If "Remove" in op_move and self.flag:
 
                 if "Move" in serv:
                     print(serv)
-                    op_move = serv#.split('\n')
+                    op_move = serv #  .split('\n')
                     break
 
-        ####Convert server choice to our game's move format
+        #  Convert server choice to our game's move format
         choice = decode_from_server(op_move)
 
         for i in moves:
             options.append(str(i))
-        #Find the choice's index from list of moves
+        #  Find the choice's index from list of moves
         for s in options:
             if choice in s:
                 index = options.index(s)
-        if (index == []):
+        if index == []:
             print("Could not find Opponent's move.....")
         return moves[index]
+
 
 # Gets next move from user input
 class HumanPlayer(Player):

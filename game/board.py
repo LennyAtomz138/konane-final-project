@@ -1,7 +1,8 @@
 import enum
 from .move import Move
 
-# Board represented by double array of bools (True = occupied, False = empty)
+
+# Board represented by double array of booleans (True = occupied, False = empty)
 class Board:
     size = 18
 
@@ -57,6 +58,7 @@ class Board:
             }[c.color()]
         return '\n'.join(f'{idx+1:>2} ' + ' '.join(row) for (idx, row) in reversed(list(enumerate(cells)))) + '\n-- ' + ' '.join(chr(c) for c in range(97, 97+Board.size))
 
+
 # Cell has reference to its board, (x, y) coords, and bool
 class Cell:
     def __init__(self, board, coord, occupied):
@@ -65,13 +67,13 @@ class Cell:
         self._occupied = occupied
 
     def color(self):
-        return (Color.white if (self._row + self._col) % 2 == 0 else Color.black)
+        return Color.white if (self._row + self._col) % 2 == 0 else Color.black
 
     def occupied(self):
         return self._occupied
 
     def coord(self):
-        return (self._row, self._col)
+        return self._row, self._col
 
     def row(self):
         return self._row
@@ -89,7 +91,7 @@ class Cell:
         return self.neighbor(*direction)
     
     def __sub__(self, other):
-        return (self._row - other._row, self._col - other._col)
+        return self._row - other._row, self._col - other._col
 
     def __str__(self):
         return f'({self._row + 1}, {chr(self._col + 97)})'
@@ -98,10 +100,12 @@ class Cell:
     def valid(cls, row, col):
         return (0 <= row < Board.size) and (0 <= col < Board.size)
 
+
 class Color(enum.IntEnum):
     white = 0
     black = 1
     nocolor = 2
+
 
 class Direction(enum.Enum):
     left = (0, -1)
