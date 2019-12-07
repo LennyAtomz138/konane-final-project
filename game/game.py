@@ -1,3 +1,4 @@
+import pickle
 from .board import Board
 from .state import State
 
@@ -32,6 +33,18 @@ class Game:
     def winner(self):
         assert self._state.is_loss()
         return [1,0][self._player]
+
+    """TODO: implement delayed reward functionality. I.e. given an AI player, use the player's self._path to
+    modify the polynomial by getting the delta between the score(final board) and all preceding board
+    scores. For each delta, determine which terms in the current polynomial lead to its underestimating/
+    overestimating, and adjust those term's coefficients as necessary """
+    def reward(self, player):
+        playerPath = player.getPath()
+        curPolynomial = pickle.load(open('../Memory/polynomial.data', 'rb'))
+        # modify the polynomial as needed here
+        
+        # pickle.dump(newPolynomial, open('../Memory/polynomial.data', 'wb'))
+        pass
 
     def run_all(self):
         for _ in self:

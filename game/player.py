@@ -101,6 +101,9 @@ class AIPlayer(Player):
             self.tn.write(encode_for_server(str(bestMove)).encode('ascii') + b"\r\n")
         return bestMove
 
+    def getPath(self, state):
+        return self._path
+
 # Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start=None):
