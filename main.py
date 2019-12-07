@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     print("\nSelect type of game for the AI to play:\n\t1)Human Player\n\t2)Server Player\n\t3)Itself\n\t4)Human vs Human")
     choice = input("--> ")
-    if (choice == "1"):
+    if (choice == "1"): # Human/AI
         print("\nWho goes first?\n\t1)You\n\t2)AI")
         first = input("--> ")
         p0 = HumanPlayer('Player 0')
@@ -18,7 +18,7 @@ if __name__ == '__main__':
             g = Game(p1,p0)
         winner = g.run_all()
         print(winner)
-    elif (choice == "2"):
+    elif (choice == "2"): # Network/AI
         tn = telnetlib.Telnet('artemis.engr.uconn.edu', '4705')
         tn.read_until(b"?Username:")
         name = str(input('id: '))
@@ -44,13 +44,13 @@ if __name__ == '__main__':
         winner = g.run_all()
         print(winner)
 
-    elif (choice == "3"):
+    elif (choice == "3"): # AI/AI
         p0 = AIPlayer()
         p1 = AIPlayer()
         g = Game(p0, p1)
         winner = g.run_all()
         print(winner)
-    elif (choice == "4"):
+    elif (choice == "4"): # Human/Human
         p0 = HumanPlayer('Player 0')
         p1 = HumanPlayer('Player 1')
         g = Game(p0, p1)

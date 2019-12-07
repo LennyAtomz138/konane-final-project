@@ -1,9 +1,11 @@
+import pickle
+import math
+
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
 # Gives an agent the ability to select the next move given a game state
 class Player:
     def next_move(self, state):
         raise NotImplementedError
-
 
 def encode_for_server(arg):
     #recieves 'Remove (int, char)' or '(int, char) -> (int, char)'
@@ -32,40 +34,62 @@ def decode_from_server(arg):
         res = arg[1][8:]
         return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+")"
 
+# Gets next move via Minimax and knowledge base
 class AIPlayer(Player):
     def __init__(self, connection = None):
         self.tn = connection
         self._name = "Motley Crew"
 
+    # Returns the best-worst-case (next move, score) for a given state
+    def _minimax(self, curState, depth = 4, alpha = -math.inf, beta = math.inf, maxPlayer=True):
+        if depth == 0 or curState.is_loss():
+            return None, self._evaluate(curState)
+        elif maxPlayer:
+            maxEval = -math.inf
+            bestMove = None
+            for move in list(curState.moves()):
+                evall = self._minimax(curState + move, depth-1, alpha, beta, False)[1]
+                if maxEval < evall:
+                    maxEval = evall
+                    bestMove = move
+                alpha = max(alpha, evall)
+                if beta <= alpha:
+                    break
+            return bestMove, maxEval
+        else:
+            minEval = math.inf
+            bestMove = None
+            for move in list(curState.moves()):
+                evall = self._minimax(curState + move, depth-1, alpha, beta, True)[1]
+                if minEval > evall:
+                    minEval = evall
+                    bestMove = move
+                beta = min(beta, evall)
+                if beta <= alpha:
+                    break
+            return bestMove, minEval
+
+    # TODO: Evaluation function takes a state and evaluates situation for color that JUST moved
+    def _evaluate(self, state):
+        return 5 # placeholder
+
     def next_move(self, state):
-        # TODO: minimax (generate states, recursively generate movetree with a/b pruning)
-        # a/b pruning is efficient here since move generation is lazy, i.e. done with a generator
-        # and not a list. In game tree generation, assume other player is also an AI and call next_move
-        # recursively
-        # for move in state.moves():
-        #     pass
-        moves = list(state.moves())
         print(f'*** {self._name}\'s move ***')
         print(state)
 
-        ##Make this part evaluate moves and return the index of the move it chose to play
-        print('*** Moves ***')
-        print('\n'.join(map(str, enumerate(map(str, moves)))))
-        index = int(input('Move: '))
-        ################################################
+        # Get next move using _minimax and print
+        bestMove = self._minimax(curState = state)[0]
+        print(bestMove)
 
-        #Uses index to find the chosen move, converts it to server format, and sends it
+        # Convert chosen move to server format, and send it (if against network)
         if (self.tn is not None):
-            options = []
-            for i in moves:
-                options.append(str(i))
-            self.tn.write(encode_for_server(options[index]).encode('ascii')+b"\r\n")
-        #updates our board
-        return moves[index]
+            self.tn.write(encode_for_server(str(bestMove)).encode('ascii')+b"\r\n")
+        return bestMove
 
     def _evaluate_state(self, state):
         pass
 
+# Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start = None):
         self.tn = connection
@@ -117,6 +141,7 @@ class NetworkPlayer(Player):
             print("Could not find Opponent's move.....")
         return moves[index]
 
+# Gets next move from user input
 class HumanPlayer(Player):
     def __init__(self, name):
         self._name = name
