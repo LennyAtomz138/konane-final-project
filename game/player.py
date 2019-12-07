@@ -1,4 +1,4 @@
-import pickle
+import sqlite3
 import math
 
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
@@ -36,9 +36,11 @@ def decode_from_server(arg):
 
 # Gets next move via Minimax and knowledge base
 class AIPlayer(Player):
-    def __init__(self, connection = None):
+    def __init__(self, connection = None, learn = True):
         self.tn = connection
         self._name = "Motley Crew"
+        if learn:
+            self._db = sqlite3.connect('brain.db')
 
     # Returns the best-worst-case (next move, score) for a given state
     def _minimax(self, curState, depth = 4, alpha = -math.inf, beta = math.inf, maxPlayer=True):
@@ -85,9 +87,6 @@ class AIPlayer(Player):
         if (self.tn is not None):
             self.tn.write(encode_for_server(str(bestMove)).encode('ascii')+b"\r\n")
         return bestMove
-
-    def _evaluate_state(self, state):
-        pass
 
 # Gets next move from network
 class NetworkPlayer(Player):

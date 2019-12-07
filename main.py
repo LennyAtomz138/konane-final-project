@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     elif (choice == "3"): # AI/AI
         p0 = AIPlayer()
-        p1 = AIPlayer()
+        p1 = AIPlayer(learn = False)
         g = Game(p0, p1)
         winner = g.run_all()
         print(winner)
