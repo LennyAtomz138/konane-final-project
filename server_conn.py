@@ -21,8 +21,8 @@ flag = False
 
 while True:
     res = tn.read_some()
-    #print(res)
-    print(str(res, "utf-8"))
+    print(res)
+    #print(str(res, "utf-8"))
     if "Player:1" in str(res, "utf-8"):
         tn.write(input("Remove: ").encode('ascii') + b"\r\n")
         flag = True
