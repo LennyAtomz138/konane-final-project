@@ -1,4 +1,4 @@
-from game.player import HumanPlayer
+from game.player import HumanPlayer, AIPlayer, NetworkPlayer
 from game.game import Game
 import sys
 import telnetlib
@@ -21,10 +21,10 @@ if __name__ == '__main__':
     elif (choice == "2"): # Network/AI
         tn = telnetlib.Telnet('artemis.engr.uconn.edu', '4705')
         tn.read_until(b"?Username:")
-        tn.write(b"42069\r\n")
+        name = str(input('id: '))
+        tn.write(name.encode('ascii') + b"\r\n")
         tn.read_until(b"?Password:")
-        tn.write(b"42069\r\n")
-        print("Your id = 42069")
+        tn.write(name.encode('ascii') + b"\r\n")
         tn.read_until(b"?Opponent:")
         choice = str(input('Opponent:'))
         tn.write(choice.encode('ascii') + b"\r\n")
@@ -33,12 +33,12 @@ if __name__ == '__main__':
             print(str(res, "utf-8"))
             if ("Player:1" in str(res, "utf-8")):
                 p0 = NetworkPlayer(tn)
-                p1 = AIPlayer()
+                p1 = AIPlayer(tn)
                 g = Game(p1, p0)
                 break
             elif ("Player:2" in str(res, "utf-8")):
-                p0 = NetworkPlayer(tn)
-                p1 = AIPlayer()
+                p0 = NetworkPlayer(tn, str(res, "utf-8"))
+                p1 = AIPlayer(tn)
                 g = Game(p0, p1)
                 break
         winner = g.run_all()
