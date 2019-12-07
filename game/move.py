@@ -1,6 +1,8 @@
 # Starting cell, destination cell
 # Move#added() returns destination cell (to be occupied)
 # Move#removed() returns removed cells (to be de-occupied)
+
+
 class Move:
     def __init__(self, start, end):
         self._start = start
