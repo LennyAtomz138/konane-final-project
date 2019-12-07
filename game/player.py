@@ -11,53 +11,55 @@ class Player:
 
 
 def encode_for_server(arg):
-    #recieves 'Remove (int, char)' or '(int, char) -> (int, char)'
-    if '->' in arg: # not first move
+    # Receives 'Remove (int, char)' or '(int, char) -> (int, char)'
+    if '->' in arg:  # not first move
         res = arg.split('->')
         print("Moving encoding:")
         print(res)
-        return "["+str(int(res[0][1])-1)+":"+str(cols.index(res[0][4]))+"]"+":"+"["+str(int(res[1][2])-1)+":"+str(cols.index(res[1][5]))+"]"
+        return "[" + str(int(res[0][1]) - 1) + ":" + str(cols.index(res[0][4])) + "]" + ":" + "[" + str(
+            int(res[1][2]) - 1) + ":" + str(cols.index(res[1][5])) + "]"
     else:
         res = arg[7:]
         print("Removing encoding:")
         print(res)
-        return "["+str(int(res[1])-1)+":"+str(cols.index(res[4]))+"]"
+        return "[" + str(int(res[1]) - 1) + ":" + str(cols.index(res[4])) + "]"
 
 
 def decode_from_server(arg):
-    if ']:[' in arg: #not first move
-        #[2:0]:[0:0]
+    if ']:[' in arg:  # not first move
+        # [2:0]:[0:0]
         print("Moving decoding:")
         print(arg)
         res = arg[4:]
-        return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+") -> (" +str(int(res[7])+1)+", "+cols[int(res[9])]+")"
+        return "(" + str(int(res[1]) + 1) + ", " + cols[int(res[3])] + ") -> (" + str(int(res[7]) + 1) + ", " + cols[
+            int(res[9])] + ")"
     else:
         print("Removing decoding:")
         print(arg)
-        #Removed:[0:0]
+        # Removed:[0:0]
         res = arg[1][8:]
-        return "("+str(int(res[1])+1)+", "+cols[int(res[3])]+")"
+        return "(" + str(int(res[1]) + 1) + ", " + cols[int(res[3])] + ")"
 
 
 # Gets next move via Minimax and knowledge base
 class AIPlayer(Player):
-    def __init__(self, connection = None):
+    def __init__(self, connection=None):
         self.tn = connection
         self._name = "Motley Crew"
 
     # Returns the best-worst-case (next move, score) for a given state
-    def _minimax(self, curState, depth = 4, alpha = -math.inf, beta = math.inf, maxPlayer=True):
+    def _minimax(self, curState, depth=4, alpha=-math.inf, beta=math.inf, maxPlayer=True):
         if depth == 0 or curState.is_loss():
             return None, self._evaluate(curState)
         elif maxPlayer:
             maxEval = -math.inf
             bestMove = None
             for move in list(curState.moves()):
-                evall = self._minimax(curState + move, depth-1, alpha, beta, False)[1]
-                if maxEval < evall:
-                    maxEval = evall
+                curr_eval = self._minimax(curState + move, depth - 1, alpha, beta, False)[1]
+                if maxEval < curr_eval:
+                    maxEval = curr_eval
                     bestMove = move
-                alpha = max(alpha, evall)
+                alpha = max(alpha, curr_eval)
                 if beta <= alpha:
                     break
             return bestMove, maxEval
@@ -65,30 +67,30 @@ class AIPlayer(Player):
             minEval = math.inf
             bestMove = None
             for move in list(curState.moves()):
-                evall = self._minimax(curState + move, depth-1, alpha, beta, True)[1]
-                if minEval > evall:
-                    minEval = evall
+                curr_eval = self._minimax(curState + move, depth - 1, alpha, beta, True)[1]
+                if minEval > curr_eval:
+                    minEval = curr_eval
                     bestMove = move
-                beta = min(beta, evall)
+                beta = min(beta, curr_eval)
                 if beta <= alpha:
                     break
             return bestMove, minEval
 
     # TODO: Evaluation function takes a state and evaluates situation for color that JUST moved
     def _evaluate(self, state):
-        return 5 # placeholder
+        return 5  # placeholder
 
     def next_move(self, state):
         print(f'*** {self._name}\'s move ***')
         print(state)
 
         # Get next move using _minimax and print
-        bestMove = self._minimax(curState = state)[0]
+        bestMove = self._minimax(curState=state)[0]
         print(bestMove)
 
         # Convert chosen move to server format, and send it (if against network)
-        if (self.tn is not None):
-            self.tn.write(encode_for_server(str(bestMove)).encode('ascii')+b"\r\n")
+        if self.tn is not None:
+            self.tn.write(encode_for_server(str(bestMove)).encode('ascii') + b"\r\n")
         return bestMove
 
     def _evaluate_state(self, state):
@@ -97,7 +99,7 @@ class AIPlayer(Player):
 
 # Gets next move from network
 class NetworkPlayer(Player):
-    def __init__(self, connection, start = None):
+    def __init__(self, connection, start=None):
         self.tn = connection
         self._name = "Server Opponent"
         self.first = start
@@ -131,7 +133,7 @@ class NetworkPlayer(Player):
 
                 if "Move" in serv:
                     print(serv)
-                    op_move = serv #  .split('\n')
+                    op_move = serv  # .split('\n')
                     break
 
         #  Convert server choice to our game's move format
