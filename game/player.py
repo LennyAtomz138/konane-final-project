@@ -3,6 +3,7 @@ class Player:
     def next_move(self, state):
         raise NotImplementedError
 
+# Gets next move via Minimax and knowledge base
 class AIPlayer(Player):
     def next_move(self, state):
         # TODO: minimax (generate states, recursively generate movetree with a/b pruning)
@@ -14,6 +15,7 @@ class AIPlayer(Player):
     def _evaluate_state(self, state):
         pass
 
+# Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection):
         self.tn = connection
@@ -21,6 +23,7 @@ class NetworkPlayer(Player):
     def next_move(self, state):
         pass
 
+# Gets next move from user input
 class HumanPlayer(Player):
     def __init__(self, name):
         self._name = name

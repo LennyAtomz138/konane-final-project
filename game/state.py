@@ -52,18 +52,19 @@ class State:
                 yield InitialMove(hole + direction.value)
             except IndexError:
                 pass
-
+    
+    # Generates all valid moves current color can make
     def _moves(self):
         for cell in self._board.cells(occupied_only=True, color=self._color):
             for direction in Direction:
                 direction = direction.value
                 ptr = cell
-                try:
+                try: # Can capture a piece
                     while (ptr + direction).occupied() and not (ptr + direction + direction).occupied():
                         destination = ptr + direction + direction
                         yield Move(cell, destination)
-                        ptr = destination
-                except IndexError:
+                        ptr = destination # Consecutive jumps are separate moves
+                except IndexError: # Move OOB
                     pass
     
     def __str__(self):

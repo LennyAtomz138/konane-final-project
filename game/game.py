@@ -1,6 +1,7 @@
 from .board import Board
 from .state import State
 
+# Game#run_all() causes players to make moves until gameover. Returns winning player
 class Game:
     def __init__(self, p0, p1):
         self._p = [p0, p1]

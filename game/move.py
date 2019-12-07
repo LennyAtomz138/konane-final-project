@@ -1,3 +1,6 @@
+# Starting cell, destination cell
+# Move#added() returns destination cell (to be occupied)
+# Move#removed() returns removed cells (to be de-occupied)
 class Move:
     def __init__(self, start, end):
         self._start = start
@@ -10,7 +13,7 @@ class Move:
         d = self._end - self._start
         dist = abs(sum(d))
         v = (d[0]//dist, d[1]//dist)
-        result = [self._start]
+        result = [self._start] 
         ptr = self._start + v
         try:
             while len(result) <= dist / 2:

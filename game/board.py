@@ -1,12 +1,14 @@
 import enum
 from .move import Move
 
+# Board represented by double array of bools (True = occupied, False = empty)
 class Board:
     size = 18
 
     def __init__(self):
         self._board = [[True] * Board.size] * Board.size
     
+    # Get a cell (occupied/not occupied) by index or coord
     def __getitem__(self, index):
         if index.__class__ == int:
             return self._board[index]
@@ -14,6 +16,7 @@ class Board:
             return Cell(self, index, self._board[index[0]][index[1]])
         raise TypeError
 
+    # Iterate all cells (only occupied, removed, or of a color)
     def cells(self, occupied_only=False, removed_only=False, color=None):
         assert not (occupied_only and removed_only)
         for row in range(Board.size):
@@ -33,6 +36,7 @@ class Board:
     def n_removed(self):
         return (Board.size ** 2) - self.n_occupied()
 
+    # Generates/returns new board after applying move
     def __add__(self, next_move):
         assert isinstance(next_move, Move)
         next_board = Board()
@@ -53,6 +57,7 @@ class Board:
             }[c.color()]
         return '\n'.join(f'{idx+1:>2} ' + ' '.join(row) for (idx, row) in reversed(list(enumerate(cells)))) + '\n-- ' + ' '.join(chr(c) for c in range(97, 97+Board.size))
 
+# Cell has reference to its board, (x, y) coords, and bool
 class Cell:
     def __init__(self, board, coord, occupied):
         (self._row, self._col) = coord
@@ -79,6 +84,7 @@ class Cell:
             raise IndexError
         return self._board[(self._row + v_row, self._col + v_col)]
     
+    # Returns captured cell
     def __add__(self, direction):
         return self.neighbor(*direction)
     
