@@ -23,14 +23,10 @@ while True:
     res = tn.read_some()
     print(res)
     #print(str(res, "utf-8"))
-    if "Player:1" in str(res, "utf-8"):
+    if "?Remove" in str(res, "utf-8"):
         tn.write(input("Remove: ").encode('ascii') + b"\r\n")
-        flag = True
-    if "Player:2" in str(res, "utf-8"):
-        tn.write(input("Remove: ").encode('ascii') + b"\r\n")
-        flag = True
 
-    if flag and "?Move" in str(res, "utf-8"):
+    if "?Move" in str(res, "utf-8"):
         tn.write(input("Move: ").encode('ascii') + b"\r\n")
 
     if "Error:" in str(res, "utf-8"):
