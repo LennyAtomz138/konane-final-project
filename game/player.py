@@ -1,5 +1,6 @@
 import pickle
 import math
+import json
 
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
 
@@ -16,29 +17,39 @@ def encode_for_server(arg):
         res = arg.split('->')
         print("Moving encoding:")
         print(res)
-        return "[" + str(int(res[0][1]) - 1) + ":" + str(cols.index(res[0][4])) + "]" + ":" + "[" + str(
-            int(res[1][2]) - 1) + ":" + str(cols.index(res[1][5])) + "]"
+        #['(3, a) ', ' (1, a)']
+        p1 = tuple(map(str, res[0].replace(' ','')[1:-1].split(',')))
+        p2 = tuple(map(str, res[1].replace(' ','')[1:-1].split(',')))
+        return "[" + str(int(p1[0]) - 1) + ":" + str(cols.index(p1[1])) + "]" + ":" + "[" + str(
+            int(p2[0]) - 1) + ":" + str(cols.index(p2[1])) + "]"
     else:
         res = arg[7:]
         print("Removing encoding:")
         print(res)
-        return "[" + str(int(res[1]) - 1) + ":" + str(cols.index(res[4])) + "]"
+        #(1, a)
+        p1 = tuple(map(str, res.replace(' ','')[1:-1].split(',')))
+        return "[" + str(int(p1[0]) - 1) + ":" + str(cols.index(p1[1])) + "]"
 
 
 def decode_from_server(arg):
     if ']:[' in arg:  # not first move
-        # [2:0]:[0:0]
-        print("Moving decoding:")
-        print(arg)
         res = arg[4:]
-        return "(" + str(int(res[1]) + 1) + ", " + cols[int(res[3])] + ") -> (" + str(int(res[7]) + 1) + ", " + cols[
-            int(res[9])] + ")"
+        print("Moving decoding:")
+        print(res)
+        #[2:0]:[0:0]
+        res = res.replace("]:[", "],[").split(",")
+        p1 = json.loads(res[0].replace(":", ","))
+        p2 = json.loads(res[1].replace(":", ","))
+
+        return "(" + str(int(p1[0]) + 1) + ", " + cols[int(p1[1])] + ") -> (" + str(int(p2[0]) + 1) + ", " + cols[
+            int(p2[1])] + ")"
     else:
+        res = arg[8:]
         print("Removing decoding:")
-        print(arg)
-        # Removed:[0:0]
-        res = arg[1][8:]
-        return "(" + str(int(res[1]) + 1) + ", " + cols[int(res[3])] + ")"
+        print(res)
+        #[0:0]
+        p1 = json.loads(res.replace(":", ","))
+        return "(" + str(int(p1[0]) + 1) + ", " + cols[int(p1[1])] + ")"
 
 
 # Gets next move via Minimax and knowledge base
@@ -96,7 +107,8 @@ class AIPlayer(Player):
     def _evaluate_state(self, state):
         pass
 
-
+    def __str__(self):
+        return self._name
 # Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start=None):
@@ -113,27 +125,26 @@ class NetworkPlayer(Player):
         op_move = ''
         print(f'*** {self._name}\'s move ***')
         print(state)
-        #  Checks if we are first (0) or second (1) to move
+
         if self.flag and self.first is not None:
             #  Get first remove from the network and play that
             res = self.first.split('\n')
             print(res)
-            op_move = res
+            op_move = res[1]
             self.flag = False
         else:
+            buffer = []
             while True:
                 stri = self.tn.read_some()
                 serv = str(stri, "utf-8")
                 print(serv)
+                buffer.append(serv)
                 if "Error:" in serv:
                     return None
                 if "win" in serv:
                     return None
-                #  If "Remove" in op_move and self.flag:
-
-                if "Move" in serv:
-                    print(serv)
-                    op_move = serv  # .split('\n')
+                if "?Move" in serv:
+                    op_move = buffer[-2]  # .split('\n')
                     break
 
         #  Convert server choice to our game's move format
@@ -149,11 +160,14 @@ class NetworkPlayer(Player):
             print("Could not find Opponent's move.....")
         return moves[index]
 
+        def __str__(self):
+            return self._name
 
 # Gets next move from user input
 class HumanPlayer(Player):
-    def __init__(self, name):
+    def __init__(self, name, connection=None):
         self._name = name
+        self.tn = connection
 
     def next_move(self, state):
         moves = list(state.moves())
@@ -162,6 +176,8 @@ class HumanPlayer(Player):
         print('*** Moves ***')
         print('\n'.join(map(str, enumerate(map(str, moves)))))
         index = int(input('Move: '))
+        if self.tn is not None:
+            self.tn.write(encode_for_server(str(moves[index])).encode('ascii') + b"\r\n")
         return moves[index]
 
     def __str__(self):
