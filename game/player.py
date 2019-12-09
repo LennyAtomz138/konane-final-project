@@ -1,5 +1,6 @@
 import pickle
 import math
+from .polynomial import (Polynomial, Term)
 import json
 
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
@@ -53,15 +54,20 @@ def decode_from_server(arg):
 
 
 # Gets next move via Minimax and knowledge base
+# Learning AIs keep track of path (state, score) for reward later
 class AIPlayer(Player):
-    def __init__(self, connection=None):
+    def __init__(self, connection = None, learn = True):
         self.tn = connection
         self._name = "Motley Crew"
+        self._learn = learn
+        self._polynomial = pickle.load(open('Memory/polynomial.data', 'rb'))
+        if learn:
+            self._path = []
 
-    # Returns the best-worst-case (next move, score) for a given state
+    # Returns the best-worst-case (next move, score)
     def _minimax(self, curState, depth=4, alpha=-math.inf, beta=math.inf, maxPlayer=True):
         if depth == 0 or curState.is_loss():
-            return None, self._evaluate(curState)
+            return None, self._polynomial.evaluate(curState)
         elif maxPlayer:
             maxEval = -math.inf
             bestMove = None
@@ -87,28 +93,31 @@ class AIPlayer(Player):
                     break
             return bestMove, minEval
 
-    # TODO: Evaluation function takes a state and evaluates situation for color that JUST moved
-    def _evaluate(self, state):
-        return 5  # placeholder
-
     def next_move(self, state):
         print(f'*** {self._name}\'s move ***')
         print(state)
 
-        # Get next move using _minimax and print
         bestMove = self._minimax(curState=state)[0]
         print(bestMove)
 
-        # Convert chosen move to server format, and send it (if against network)
+        # If learning, save each new position and its static evaluation to self._path
+        if self._learn:
+            if state.board().n_removed() <= 1: 
+                self._path.append((state, self._polynomial.evaluate(state)))
+            newState = state + bestMove
+            self._path.append((newState, self._polynomial.evaluate(newState)))
+        print(self._path)
+        
         if self.tn is not None:
             self.tn.write(encode_for_server(str(bestMove)).encode('ascii') + b"\r\n")
         return bestMove
 
-    def _evaluate_state(self, state):
-        pass
+    def getPath(self, state):
+        return self._path
 
     def __str__(self):
         return self._name
+
 # Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start=None):
