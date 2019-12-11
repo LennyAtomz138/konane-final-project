@@ -6,6 +6,7 @@ coefficients and terms with the default
 
 Do NOT do this unless we are starting over with learning!"""
 
+
 # TODO: Finish defining terms, then run this function to generate a starting memory so we can start training
 def createNewMemory():
     activeTerms = [PieceAdv(), DenialOfOccupancy(), Mobility(), ControlOfCenter(), PieceAdvancement()]

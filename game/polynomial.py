@@ -1,5 +1,6 @@
 from .state import State
 
+
 class Polynomial:
 
     limit = 16
@@ -59,12 +60,15 @@ Refer to it when defining these functions"""
 
 """ TODO: implement eval() for each term. Given a state, return the "score" for the board based on the
 conditions of the term"""
+
+
 class PieceAdv(Term):
     def __init__(self):
         self._id = "pieceAdv"
 
     def eval(self, state):
         pass
+
 
 class DenialOfOccupancy(Term):
     def __init__(self):
@@ -73,6 +77,7 @@ class DenialOfOccupancy(Term):
     def eval(self, state):
         pass
 
+
 class Mobility(Term):
     def __init__(self):
         self._id = "mobility"
@@ -80,12 +85,14 @@ class Mobility(Term):
     def eval(self, state):
         pass
 
+
 class ControlOfCenter(Term):
     def __init__(self):
         self._id = "controlOfCenter"
 
     def eval(self, state):
         pass
+
 
 class PieceAdvancement(Term):
     def __init__(self):
