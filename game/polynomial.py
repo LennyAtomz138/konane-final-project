@@ -67,11 +67,7 @@ class Mobility():
         self._c = c
 
     def eval(self, state):
-        rem = state.board().n_removed()
-        value = 1
-        if rem > 250:
-            value = len(list(state.moves()))
-        return value
+        return len(list(state.moves()))
 
     def coeff(self):
         return self._c
