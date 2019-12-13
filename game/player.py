@@ -175,7 +175,7 @@ class NetworkPlayer(Player):
                 if "win" in serv:
                     return None
                 if "?Move" in serv:
-                    if "Move[" in serv:
+                    if "[" in serv:
                         op_move = serv[0:serv.index("?")]
                     else:
                         op_move = buffer[-2]  # .split('\n')
