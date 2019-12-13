@@ -1,6 +1,5 @@
 from .state import State
 
-
 class Polynomial:
 
     limit = 16
@@ -19,7 +18,7 @@ class Polynomial:
         array = []
         for c in self._active:
             array.append((c.name(), c.coeff()))
-        # print(array)
+        #print(array)
         return array
 
     def switchOut(self):
@@ -33,40 +32,9 @@ class Polynomial:
             self._active.remove(minTerm)
 
 
-# class Term:
-#     def __init__(self):
-#         self._id = None
-#         self.c = 1
-#         self._ltt = 0
-#
-#     def id(self):
-#         return self._id
-#
-#     # def c(self):
-#     #     return self._c
-#
-#     def ltt(self):
-#         return self._ltt
-#
-#     def incLTT(self):
-#         self._ltt += 1
-#
-#     def resetLTT(self):
-#         self._ltt = 0
-#
-#     def eval(self, state, color):
-#         raise NotImplementedError
-#
-#     def __eq__(self, other):
-#         return self._id == other.id
-
 
 """Following functions are possible evaluators and are based off the Appendix of Samuel's document
 Refer to it when defining these functions"""
-
-# white = 0
-# black = 1
-
 
 class PieceAdv():
     def __init__(self, c):
@@ -82,7 +50,7 @@ class PieceAdv():
                 black += 1
             elif i == '□':
                 white += 1
-        if state.color() == 0:
+        if str(state.color())[-5:] == "white":
             return white - black
         else:
             return black - white
@@ -93,11 +61,13 @@ class PieceAdv():
     def name(self):
         return self._id
 
-
 class Mobility():
     def __init__(self, c):
         self._id = "mobility"
         self._c = c
+
+    def eval(self, state):
+        return len(list(state.moves()))
 
     def coeff(self):
         return self._c
@@ -105,53 +75,35 @@ class Mobility():
     def name(self):
         return self._id
 
+
+class DenialOfOccupancy():
+    def __init__(self, c):
+        self._id = "denialOfOccupancy"
+        self._c = c
+
     def eval(self, state):
-        return len(list(state.moves()))
+        states = list(state.moves())
+        total = 0
+        for m in states:
+            newState = state + m
+            total += len(list(newState.moves()))
 
-# class Dom():
-#     def __init__(self, c):
-#         self._id = "dom"
-#         self._c = c
-#
-#     def eval(self, state):
-#         rem = state.board().n_removed()
-#         value = 1
-#         if rem > 250:
-#             value = len(list(state.moves()))
-#         return sign * value
-#
-#     def coeff(self):
-#         return self._c
-#
-#     def name(self):
-#         return self._id
+        if str(state.color())[-5:] == "white":
+            return len(states) - total
+        else:
+            return total - len(states)
 
-# class DenialOfOccupancy(Term):
-#     def __init__(self):
-#         self._id = "denialOfOccupancy"
-#
-#     def eval(self, state):
-#         pass
-#
-# class Mobility(Term):
-#     def __init__(self):
-#         self._id = "mobility"
-#
-#     def eval(self, state):
-#         pass
-#
-# class ControlOfCenter(Term):
+    def coeff(self):
+        return self._c
+
+    def name(self):
+        return self._id
+
+# class ControlOfCenter():
 #     def __init__(self):
 #         self._id = "controlOfCenter"
 #
 #     def eval(self, state):
 #         pass
 #
-# class PieceAdvancement(Term):
-#     def __init__(self):
-#         self._id = "pieceAdvancement"
-#
-#     def eval(self, state):
-#         pass
-
 # NOTE: There are many more terms (26 + 16) found in the manual; would be ideal if we got most of them
