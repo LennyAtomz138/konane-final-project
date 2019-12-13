@@ -67,6 +67,21 @@ class State:
                         ptr = destination # Consecutive jumps are separate moves
                 except IndexError: # Move OOB
                     pass
+
+    # Efficient counter of # of moves for Mobility term
+    def numMoves(self):
+        count = 0
+        for cell in self._board.cells(occupied_only=True, color=self._color):
+            for direction in Direction:
+                direction = direction.value
+                ptr = cell
+                try: 
+                    while (ptr + direction).occupied() and not (ptr + direction + direction).occupied():
+                        destination = ptr + direction + direction
+                        ptr = destination # Consecutive jumps are separate moves
+                except IndexError:
+                    pass
+        return count
     
     def __str__(self):
         return f'{self._board}\n{self._color.name}'
