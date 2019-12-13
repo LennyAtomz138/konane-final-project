@@ -1,5 +1,3 @@
-from .state import State
-
 class Polynomial:
 
     limit = 16
@@ -18,7 +16,7 @@ class Polynomial:
         array = []
         for c in self._active:
             array.append((c.name(), c.coeff()))
-        #print(array)
+        # print(array)
         return array
 
     def switchOut(self):
@@ -32,9 +30,11 @@ class Polynomial:
             self._active.remove(minTerm)
 
 
+"""
+Following functions are possible evaluators and are based off the Appendix of Samuel's document
+Refer to it when defining these functions
+"""
 
-"""Following functions are possible evaluators and are based off the Appendix of Samuel's document
-Refer to it when defining these functions"""
 
 class PieceAdv():
     def __init__(self, c):
@@ -60,6 +60,7 @@ class PieceAdv():
 
     def name(self):
         return self._id
+
 
 class Mobility():
     def __init__(self, c):

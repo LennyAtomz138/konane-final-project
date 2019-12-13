@@ -59,6 +59,9 @@ class Board:
         return '\n'.join(f'{idx+1:>2} ' + ' '.join(row) for (idx, row) in reversed(list(enumerate(cells)))) \
                + '\n-- ' + ' '.join(chr(c) for c in range(97, 97+Board.size))
 
+    def __iter__(self):
+        return self.cells()
+
 
 # Cell has reference to its board, (x, y) coords, and bool
 class Cell:
