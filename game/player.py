@@ -3,7 +3,6 @@ import math
 from .polynomial import *
 import json
 import random
-import time
 
 cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r']
 
@@ -166,7 +165,6 @@ class NetworkPlayer(Player):
         else:
             buffer = []
             while True:
-                time.sleep(.05)
                 stri = self.tn.read_some()
                 print(stri)
                 serv = str(stri, "utf-8")
@@ -177,7 +175,10 @@ class NetworkPlayer(Player):
                 if "win" in serv:
                     return None
                 if "?Move" in serv:
-                    op_move = buffer[-2]  # .split('\n')
+                    if "Move[" in serv:
+                        op_move = serv[0:serv.index("?")]
+                    else:
+                        op_move = buffer[-2]  # .split('\n')
                     break
 
         #  Convert server choice to our game's move format
