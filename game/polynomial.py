@@ -32,33 +32,6 @@ class Polynomial:
             self._active.remove(minTerm)
 
 
-# class Term:
-#     def __init__(self):
-#         self._id = None
-#         self.c = 1
-#         self._ltt = 0
-#
-#     def id(self):
-#         return self._id
-#
-#     # def c(self):
-#     #     return self._c
-#
-#     def ltt(self):
-#         return self._ltt
-#
-#     def incLTT(self):
-#         self._ltt += 1
-#
-#     def resetLTT(self):
-#         self._ltt = 0
-#
-#     def eval(self, state, color):
-#         raise NotImplementedError
-#
-#     def __eq__(self, other):
-#         return self._id == other.id
-
 
 """Following functions are possible evaluators and are based off the Appendix of Samuel's document
 Refer to it when defining these functions"""
@@ -77,7 +50,7 @@ class PieceAdv():
                 black += 1
             elif i == '□':
                 white += 1
-        if state.color() == 'white':
+        if str(state.color())[-5:] == "white":
             return white - black
         else:
             return black - white
@@ -93,17 +66,12 @@ class Mobility():
         self._id = "mobility"
         self._c = c
 
-    def eval(self, state, dom):
-        sign = 1
-        if str(state.color())[-5:] == "white" and dom[0] == "white":
-            sign = -1
-        elif  str(state.color())[-5:] == "black" and dom[0] == "black":
-            sign = -1
+    def eval(self, state):
         rem = state.board().n_removed()
         value = 1
         if rem > 250:
             value = len(list(state.moves()))
-        return sign * value
+        return value
 
     def coeff(self):
         return self._c
@@ -111,32 +79,37 @@ class Mobility():
     def name(self):
         return self._id
 
-# class DenialOfOccupancy(Term):
-#     def __init__(self):
-#         self._id = "denialOfOccupancy"
-#
-#     def eval(self, state):
-#         pass
-#
-# class Mobility(Term):
-#     def __init__(self):
-#         self._id = "mobility"
-#
-#     def eval(self, state):
-#         pass
-#
-# class ControlOfCenter(Term):
+
+class DenialOfOccupancy():
+    def __init__(self, c):
+        self._id = "denialOfOccupancy"
+        self._c = c
+
+    def eval(self, state):
+        b = str(state.board())
+        black = 0
+        white = 0
+        for i in b:
+            if i == '■':
+                black += 1
+            elif i == '□':
+                white += 1
+        if str(state.color())[-5:] == "white":
+            return black - white
+        else:
+            return white - black
+
+    def coeff(self):
+        return self._c
+
+    def name(self):
+        return self._id
+
+# class ControlOfCenter():
 #     def __init__(self):
 #         self._id = "controlOfCenter"
 #
 #     def eval(self, state):
 #         pass
 #
-# class PieceAdvancement(Term):
-#     def __init__(self):
-#         self._id = "pieceAdvancement"
-#
-#     def eval(self, state):
-#         pass
-
 # NOTE: There are many more terms (26 + 16) found in the manual; would be ideal if we got most of them
