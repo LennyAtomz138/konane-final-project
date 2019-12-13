@@ -17,7 +17,7 @@ class State:
         return self._color
     
     def is_loss(self):
-        return next(self.moves(), None) == None
+        return next(self.moves(), None) is None
 
     def moves(self):
         if self._board.n_removed() == 0:
@@ -40,8 +40,8 @@ class State:
         c = Board.size // 2
         d = c - 1
         candidates = [
-            (a,a), (a,b), (b,a), (b,b),
-            (c,c), (c,d), (d,c), (d,d)
+            (a, a), (a, b), (b, a), (b, b),
+            (c, c), (c, d), (d, c), (d, d)
         ]
         for cell in candidates:
             yield InitialMove(self._board[cell])
@@ -60,12 +60,12 @@ class State:
             for direction in Direction:
                 direction = direction.value
                 ptr = cell
-                try: # Can capture a piece
+                try:  # Can capture a piece
                     while (ptr + direction).occupied() and not (ptr + direction + direction).occupied():
                         destination = ptr + direction + direction
                         yield Move(cell, destination)
                         ptr = destination # Consecutive jumps are separate moves
-                except IndexError: # Move OOB
+                except IndexError:  # Move OOB
                     pass
 
     # Efficient counter of # of moves for Mobility term
@@ -78,7 +78,7 @@ class State:
                 try: 
                     while (ptr + direction).occupied() and not (ptr + direction + direction).occupied():
                         destination = ptr + direction + direction
-                        ptr = destination # Consecutive jumps are separate moves
+                        ptr = destination  # Consecutive jumps are separate moves
                 except IndexError:
                     pass
         return count
