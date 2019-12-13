@@ -123,7 +123,7 @@ class AIPlayer(Player):
                 self._path.append((state, self._polynomial.evaluate(state)))
             newState = state + bestMove
             self._path.append((newState, self._polynomial.evaluate(newState)))
-            print(self._path)
+            #print(self._path)
 
         if self.tn is not None:
             self.tn.write(encode_for_server(str(bestMove)).encode('ascii') + b"\r\n")
