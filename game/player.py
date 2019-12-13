@@ -166,6 +166,7 @@ class NetworkPlayer(Player):
             buffer = []
             while True:
                 stri = self.tn.read_some()
+                print(stri)
                 serv = str(stri, "utf-8")
                 print(serv)
                 buffer.append(serv)
