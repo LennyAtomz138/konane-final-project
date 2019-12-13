@@ -1,11 +1,13 @@
 from game.player import HumanPlayer, AIPlayer, NetworkPlayer
 from game.game import Game
 import telnetlib
+import pickle
+
 
 if __name__ == '__main__':
 
-    print("\nSelect type of game to play:\n\t1)Human Player vs AI\n\t2)Server Player vs AI\n\t3)Itself\n\t4)Human vs Human\n\t5)Human vs Server Player")
-    choice = input("--> ")
+    print("\nSelect type of game to play:\n\t1)Human Player vs AI\n\t2)Server Player vs AI\n\t3)Itself\n\t4)Human vs Human\n\t5)Human vs Server Player\n\t6)Print Poly")
+    choice = "7"#input("--> ")
     if (choice == "1"): # Human/AI
         print("\nWho goes first?\n\t1)You\n\t2)AI")
         first = input("--> ")
@@ -85,5 +87,21 @@ if __name__ == '__main__':
                 break
         winner = g.run_all()
         print(winner)
+    elif(choice == "6"):
+        poly = pickle.load(open('Memory/polynomial.data', 'rb'))
+        print(poly.printCoeff())
+    elif(choice == "7"):
+        ii = 0
+        while True:
+            print("Game number: "+str(ii))
+            p0 = AIPlayer()
+            p1 = AIPlayer(learn = False)
+            if ii % 2 == 0:
+                g = Game(p0, p1)
+            else:
+                g = Game(p1, p0)
+            winner = g.run_all()
+            print(winner)
+            ii += 1
     else:
         print("Try again.")
