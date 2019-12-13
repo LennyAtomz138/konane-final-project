@@ -10,7 +10,7 @@ class Polynomial:
         self._reserved = reserveTerms
 
     def evaluate(self, state):
-        # color = [1,0][state.color()] # If it's black's turn to move, then white chose the move to get to this state
+        value = 0
         for t in self._active:
             value += t.coeff() * t.eval(state)
         return value
@@ -64,6 +64,9 @@ class Polynomial:
 """Following functions are possible evaluators and are based off the Appendix of Samuel's document
 Refer to it when defining these functions"""
 
+# white = 0
+# black = 1
+
 
 class PieceAdv():
     def __init__(self, c):
@@ -79,10 +82,10 @@ class PieceAdv():
                 black += 1
             elif i == '□':
                 white += 1
-        if str(state.color())[-5:] == "white":
-            return black - white
-        else:
+        if state.color() == 0:
             return white - black
+        else:
+            return black - white
 
     def coeff(self):
         return self._c
