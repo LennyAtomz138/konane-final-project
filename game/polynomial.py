@@ -1,5 +1,6 @@
 from .state import State
 
+
 class Polynomial:
 
     limit = 16
@@ -9,7 +10,7 @@ class Polynomial:
         self._reserved = reserveTerms
 
     def evaluate(self, state):
-        #color = [1,0][state.color()] # If it's black's turn to move, then white chose the move to get to this state
+        # color = [1,0][state.color()] # If it's black's turn to move, then white chose the move to get to this state
         for t in self._active:
             value += t.coeff() * t.eval(state)
         return value
@@ -18,7 +19,7 @@ class Polynomial:
         array = []
         for c in self._active:
             array.append((c.name(), c.coeff()))
-        #print(array)
+        # print(array)
         return array
 
     def switchOut(self):
@@ -63,6 +64,7 @@ class Polynomial:
 """Following functions are possible evaluators and are based off the Appendix of Samuel's document
 Refer to it when defining these functions"""
 
+
 class PieceAdv():
     def __init__(self, c):
         self._id = "pieceAdv"
@@ -81,29 +83,28 @@ class PieceAdv():
             return black - white
         else:
             return white - black
+
     def coeff(self):
         return self._c
 
     def name(self):
         return self._id
+
 
 class Mobility():
     def __init__(self, c):
         self._id = "mobility"
         self._c = c
 
-    def eval(self, state):
-        rem = state.board().n_removed()
-        value = 1
-        if rem > 250:
-            value = len(list(state.moves()))
-        return sign * value
-
     def coeff(self):
         return self._c
 
     def name(self):
         return self._id
+
+    def eval(self, state):
+        return len(list(state.moves()))
+
 # class Dom():
 #     def __init__(self, c):
 #         self._id = "dom"
