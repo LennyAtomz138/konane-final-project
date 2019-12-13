@@ -63,7 +63,6 @@ class AIPlayer(Player):
         if learn:
             self._name = "Learner"
             prev = pickle.load(open('Memory/polynomial.data', 'rb')).printCoeff()
-            print(prev)
             self._polynomial = Polynomial([PieceAdv(random.uniform(prev[0][1]-.5, prev[0][1]+.5)),
                                         Mobility(random.uniform(prev[1][1]-.5, prev[1][1]+.5))], [])
             self._path = []
@@ -101,8 +100,8 @@ class AIPlayer(Player):
             return bestMove, minEval
 
     def next_move(self, state):
-        print(f'*** {self._name}\'s move ***')
-        print(state)
+        # print(f'*** {self._name}\'s move ***')
+        # print(state)
 
         # if self._learn:
         #     bestMove = self._minimax(curState=state)[0]
@@ -114,16 +113,16 @@ class AIPlayer(Player):
         #     print("Best move:")
         #     print(bestMove)
         bestMove = self._minimax(curState=state)[0]
-        print("Best move:")
-        print(bestMove)
+        # print("Best move:")
+        # print(bestMove)
 
         # If learning, save each new position and its static evaluation to self._path
-        if self._learn:
-            if state.board().n_removed() <= 1:
-                self._path.append((state, self._polynomial.evaluate(state)))
-            newState = state + bestMove
-            self._path.append((newState, self._polynomial.evaluate(newState)))
-            #print(self._path)
+        # if self._learn:
+        #     if state.board().n_removed() <= 1:
+        #         self._path.append((state, self._polynomial.evaluate(state)))
+        #     newState = state + bestMove
+        #     self._path.append((newState, self._polynomial.evaluate(newState)))
+        #     #print(self._path)
 
         if self.tn is not None:
             self.tn.write(encode_for_server(str(bestMove)).encode('ascii') + b"\r\n")

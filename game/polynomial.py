@@ -8,9 +8,6 @@ class Polynomial:
         self._active = activeTerms
         self._reserved = reserveTerms
 
-    """TODO: Evaluate a state's score using the polynomial. This means adding up all term evaluations from
-        the self._active array and returning this value. This can only be done AFTER the terms have been
-        defined, so do that first! """
     def evaluate(self, state):
         #color = [1,0][state.color()] # If it's black's turn to move, then white chose the move to get to this state
         value = 0
@@ -80,8 +77,6 @@ class Polynomial:
 """Following functions are possible evaluators and are based off the Appendix of Samuel's document
 Refer to it when defining these functions"""
 
-""" TODO: implement eval() for each term. Given a state, return the "score" for the board based on the
-conditions of the term"""
 class PieceAdv():
     def __init__(self, c):
         self._id = "pieceAdv"

@@ -45,8 +45,8 @@ class Game:
         # print(str(player))
         # print(curPolynomial.printCoeff())
         newPolynomial = player.getPoly()
+        print(newPolynomial)
         pickle.dump(newPolynomial, open('Memory/polynomial.data', 'wb'))
-        pass
 
     def run_all(self):
         for _ in self:
