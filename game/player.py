@@ -186,7 +186,7 @@ class NetworkPlayer(Player):
         for s in options:
             if choice in s:
                 index = options.index(s)
-        if not index:
+        if index == []:
             print(choice)
             print('\n'.join(map(str, enumerate(map(str, moves)))))
             print("Could not find Opponent's move.....")
