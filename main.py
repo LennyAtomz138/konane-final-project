@@ -1,6 +1,5 @@
 from game.player import HumanPlayer, AIPlayer, NetworkPlayer
 from game.game import Game
-import sys
 import telnetlib
 
 if __name__ == '__main__':
@@ -33,21 +32,26 @@ if __name__ == '__main__':
             print(str(res, "utf-8"))
             if ("Player:1" in str(res, "utf-8")):
                 p0 = NetworkPlayer(tn)
-                p1 = AIPlayer(tn)
+                p1 = AIPlayer(tn, False)
                 g = Game(p1, p0)
                 break
             elif ("Player:2" in str(res, "utf-8")):
                 p0 = NetworkPlayer(tn, str(res, "utf-8"))
-                p1 = AIPlayer(tn)
+                p1 = AIPlayer(tn, False)
                 g = Game(p0, p1)
                 break
         winner = g.run_all()
         print(winner)
 
     elif (choice == "3"): # AI/AI
+        print("\nShould Learner go first?\n\t1)Yes\n\t2)No")
+        first = input("--> ")
         p0 = AIPlayer()
         p1 = AIPlayer(learn = False)
-        g = Game(p0, p1)
+        if first == "1":
+            g = Game(p0, p1)
+        else:
+            g = Game(p1, p0)
         winner = g.run_all()
         print(winner)
     elif (choice == "4"): # Human/Human

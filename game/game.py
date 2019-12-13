@@ -22,7 +22,7 @@ class Game:
 
     def state(self):
         return self._state
-    
+
     def current(self):
         return self._player
 
@@ -40,13 +40,17 @@ class Game:
     overestimating, and adjust those term's coefficients as necessary """
     def reward(self, player):
         playerPath = player.getPath()
-        curPolynomial = pickle.load(open('../Memory/polynomial.data', 'rb'))
+        curPolynomial = pickle.load(open('Memory/polynomial.data', 'rb'))
         # modify the polynomial as needed here
-        
+        print(str(player))
+        print(curPolynomial.printCoeff())
         # pickle.dump(newPolynomial, open('../Memory/polynomial.data', 'wb'))
         pass
 
     def run_all(self):
         for _ in self:
             pass
+        if str(self.player(self.winner())) == "Learner":
+            print("Learner won")
+            self.reward(self.player(self.winner()))
         return self.player(self.winner())
