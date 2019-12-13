@@ -83,23 +83,18 @@ class DenialOfOccupancy():
         self._c = c
 
     def eval(self, state):
-<<<<<<< HEAD
-        """states = list(state.moves())
-=======
-        occupied = state.board().n_occupied()
+        #occupied = state.board().n_occupied()
         value = 1
         states = list(state.moves())
->>>>>>> 8a049c602cac159d48188ac5dd087895cf924139
         total = 0
         for m in states:
             newState = state + m
-            total += len(list(newState.moves()))
+            total += newState.numMoves()
 
         if str(state.color())[-5:] == "white":
-            return len(states) - total
+            return state.numMoves() - total
         else:
-            return total - len(states)"""
-        return 5
+            return total - state.numMoves()
 
     def coeff(self):
         return self._c
