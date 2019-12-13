@@ -7,12 +7,12 @@ import pickle
 if __name__ == '__main__':
 
     print("\nSelect type of game to play:\n\t1)Human Player vs AI\n\t2)Server Player vs AI\n\t3)Itself\n\t4)Human vs Human\n\t5)Human vs Server Player\n\t6)Print Poly")
-    choice = "7"#input("--> ")
+    choice = input("--> ")
     if (choice == "1"): # Human/AI
         print("\nWho goes first?\n\t1)You\n\t2)AI")
         first = input("--> ")
         p0 = HumanPlayer('Player 0')
-        p1 = AIPlayer()
+        p1 = AIPlayer(None, False)
         if (first == "1"):
             g = Game(p0, p1)
         elif(first == "2"):
