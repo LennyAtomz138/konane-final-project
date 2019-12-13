@@ -8,7 +8,7 @@ Do NOT do this unless we are starting over with learning!"""
 
 # TODO: Finish defining terms, then run this function to generate a starting memory so we can start training
 def createNewMemory():
-    activeTerms = [PieceAdv(1), Mobility(1)]#, DenialOfOccupancy(), Mobility(), ControlOfCenter(), PieceAdvancement()]
+    activeTerms = [PieceAdv(1), Mobility(1), DenialOfOccupancy(1)]# ControlOfCenter()]
     reservedTerms = [] # for overflowing terms
 
     polynomial = Polynomial(activeTerms, reservedTerms)
