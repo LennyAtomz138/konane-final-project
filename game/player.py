@@ -100,8 +100,8 @@ class AIPlayer(Player):
             return bestMove, minEval
 
     def next_move(self, state):
-        # print(f'*** {self._name}\'s move ***')
-        # print(state)
+        print(f'*** {self._name}\'s move ***')
+        print(state)
 
         # if self._learn:
         #     bestMove = self._minimax(curState=state)[0]
@@ -113,8 +113,8 @@ class AIPlayer(Player):
         #     print("Best move:")
         #     print(bestMove)
         bestMove = self._minimax(curState=state)[0]
-        # print("Best move:")
-        # print(bestMove)
+        print("Best move:")
+        print(bestMove)
 
         # If learning, save each new position and its static evaluation to self._path
         # if self._learn:

@@ -1,0 +1,296 @@
+Game number: 0
+Motley Crew
+Game number: 1
+Learner won
+<game.polynomial.Polynomial object at 0x102f065d0>
+Learner
+Game number: 2
+Motley Crew
+Game number: 3
+Learner won
+<game.polynomial.Polynomial object at 0x102f065d0>
+Learner
+Game number: 4
+Motley Crew
+Game number: 5
+*******restart*********
+[('pieceAdv', 1.6124333518093592), ('mobility', 1.6668554649785654)]
+Alexs-MacBook-Pro:konane-final-project alexoneill$
+Game number: 0
+Motley Crew
+Game number: 1
+Learner won
+[('pieceAdv', 1.4354578055968914), ('mobility', 1.1946268729420813)]
+Learner
+Game number: 2
+Motley Crew
+Game number: 3
+Learner won
+[('pieceAdv', 1.0152881840691634), ('mobility', 0.9050842642252797)]
+Learner
+Game number: 4
+Motley Crew
+Game number: 5
+Learner won
+[('pieceAdv', 0.665708644756842), ('mobility', 0.6146269858394132)]
+Learner
+Game number: 6
+Motley Crew
+Game number: 7
+Learner won
+[('pieceAdv', 0.6381612138515752), ('mobility', 0.1373690858151151)]
+Learner
+Game number: 8
+Motley Crew
+Game number: 9
+Learner won
+[('pieceAdv', 1.122268088073254), ('mobility', -0.11177204812137509)]
+Learner
+Game number: 10
+Motley Crew
+Game number: 11
+Learner won
+[('pieceAdv', 0.88240594830419), ('mobility', -0.0007843886675098499)]
+Learner
+Game number: 12
+Motley Crew
+Game number: 13
+Learner won
+[('pieceAdv', 1.2626731634831903), ('mobility', -0.46998092540241654)]
+Learner
+Game number: 14
+Learner won
+[('pieceAdv', 1.1482400038219311), ('mobility', -0.7649992804487019)]
+Learner
+Game number: 15
+Motley Crew
+Game number: 16
+Learner won
+[('pieceAdv', 0.7239857366142465), ('mobility', -0.9353531242470706)]
+Learner
+Game number: 17
+Motley Crew
+Game number: 18
+Learner won
+[('pieceAdv', 0.6417811347706339), ('mobility', -0.9503196500689515)]
+Learner
+Game number: 19
+Motley Crew
+Game number: 20
+Learner won
+[('pieceAdv', 0.8360033652997415), ('mobility', -0.8619811366997352)]
+Learner
+Game number: 21
+Motley Crew
+Game number: 22
+Learner won
+[('pieceAdv', 1.3230816658284228), ('mobility', -0.8310825767780419)]
+Learner
+Game number: 23
+Motley Crew
+Game number: 24
+Learner won
+[('pieceAdv', 1.8112845510037077), ('mobility', -0.7904059504023483)]
+Learner
+Game number: 25
+Motley Crew
+Game number: 26
+Learner won
+[('pieceAdv', 1.7575697905940548), ('mobility', -1.0652062267479272)]
+Learner
+Game number: 27
+Motley Crew
+Game number: 28
+Learner won
+[('pieceAdv', 2.243991359949389), ('mobility', -0.7861481943843691)]
+Learner
+Game number: 29
+Motley Crew
+Game number: 30
+Motley Crew
+Game number: 31
+Motley Crew
+Game number: 32
+Learner won
+[('pieceAdv', 1.9473219442670207), ('mobility', -0.8819474674801159)]
+Learner
+Game number: 33
+Motley Crew
+Game number: 34
+Learner won
+[('pieceAdv', 1.4514316713222795), ('mobility', -0.4380733414164396)]
+Learner
+Game number: 35
+Motley Crew
+Game number: 36
+Learner won
+[('pieceAdv', 1.4412644365167853), ('mobility', -0.4615551677771552)]
+Learner
+Game number: 37
+Motley Crew
+Game number: 38
+Motley Crew
+Game number: 39
+Motley Crew
+Game number: 40
+Learner won
+[('pieceAdv', 1.169360694570563), ('mobility', -0.8667490227491416)]
+Learner
+Game number: 41
+Motley Crew
+Game number: 42
+Motley Crew
+Game number: 43
+Motley Crew
+Game number: 44
+Learner won
+[('pieceAdv', 0.9443140433716241), ('mobility', -0.5781075977764294)]
+Learner
+Game number: 45
+Motley Crew
+Game number: 46
+Learner won
+[('pieceAdv', 0.8920102276136068), ('mobility', -0.4242553071238504)]
+Learner
+Game number: 47
+Learner won
+[('pieceAdv', 0.8413987016762235), ('mobility', -0.7275658762223557)]
+Learner
+Game number: 48
+Motley Crew
+Game number: 49
+Motley Crew
+Game number: 50
+Learner won
+[('pieceAdv', 0.4174764614781682), ('mobility', -0.5408686878520522)]
+Learner
+Game number: 51
+Motley Crew
+Game number: 52
+Learner won
+[('pieceAdv', 0.737115510510786), ('mobility', -0.8576720996279513)]
+Learner
+Game number: 53
+Motley Crew
+Game number: 54
+Learner won
+[('pieceAdv', 0.5737488582782535), ('mobility', -0.5566080243828001)]
+Learner
+Game number: 55
+Motley Crew
+Game number: 56
+Learner won
+[('pieceAdv', 0.6674999858701942), ('mobility', -0.6773006684901097)]
+Learner
+Game number: 57
+Motley Crew
+Game number: 58
+Motley Crew
+Game number: 59
+Motley Crew
+Game number: 60
+Learner won
+[('pieceAdv', 0.5226686214905798), ('mobility', -0.7722437989901434)]
+Learner
+Game number: 61
+Motley Crew
+Game number: 62
+Learner won
+[('pieceAdv', 0.5185978641489127), ('mobility', -0.786885155859993)]
+Learner
+Game number: 63
+Motley Crew
+Game number: 64
+Motley Crew
+Game number: 65
+Motley Crew
+Game number: 66
+Motley Crew
+Game number: 67
+Motley Crew
+Game number: 68
+Learner won
+[('pieceAdv', 0.2667488386999356), ('mobility', -0.9933825956646949)]
+Learner
+Game number: 69
+Motley Crew
+Game number: 70
+Motley Crew
+Game number: 71
+Motley Crew
+Game number: 72
+Learner won
+[('pieceAdv', 0.5331881518759839), ('mobility', -0.9070223706574589)]
+Learner
+Game number: 73
+Motley Crew
+Game number: 74
+Learner won
+[('pieceAdv', 0.7856881311969246), ('mobility', -1.1347285334524035)]
+Learner
+Game number: 75
+Motley Crew
+Game number: 76
+Learner won
+[('pieceAdv', 0.700060311390774), ('mobility', -1.530932604442943)]
+Learner
+Game number: 77
+Motley Crew
+Game number: 78
+Learner won
+[('pieceAdv', 0.8166536526944992), ('mobility', -1.2820774957393049)]
+Learner
+Game number: 79
+Motley Crew
+Game number: 80
+Learner won
+[('pieceAdv', 1.1349064934404436), ('mobility', -1.4614123381142938)]
+Learner
+Game number: 81
+Motley Crew
+Game number: 82
+Learner won
+[('pieceAdv', 1.4707426652506466), ('mobility', -1.730961623534289)]
+Learner
+Game number: 83
+Motley Crew
+Game number: 84
+Learner won
+[('pieceAdv', 1.1868741204398594), ('mobility', -1.7961651135935608)]
+Learner
+Game number: 85
+Motley Crew
+Game number: 86
+Learner won
+[('pieceAdv', 0.7328855207768415), ('mobility', -2.1166238855678516)]
+Learner
+Game number: 87
+Motley Crew
+Game number: 88
+Learner won
+[('pieceAdv', 0.9817895982903163), ('mobility', -2.1402829626422566)]
+Learner
+Game number: 89
+Motley Crew
+Game number: 90
+Learner won
+[('pieceAdv', 0.7641586800617493), ('mobility', -2.237582700918024)]
+Learner
+Game number: 91
+Motley Crew
+Game number: 92
+Learner won
+[('pieceAdv', 0.7696542812919244), ('mobility', -2.5017039425736702)]
+Learner
+Game number: 93
+Motley Crew
+Game number: 94
+Learner won
+[('pieceAdv', 0.8312680073993662), ('mobility', -2.9449643126942036)]
+Learner
+Game number: 95
+Motley Crew
+Game number: 96
+Learner won
+[('pieceAdv', 0.9162734910137765), ('mobility', -3.3463193097530084)]
+Learner
