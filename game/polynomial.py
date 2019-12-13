@@ -83,6 +83,7 @@ class DenialOfOccupancy():
 
     def eval(self, state):
         states = list(state.moves())
+        total = 0
         for m in states:
             newState = state + m
             total += len(list(newState.moves()))
