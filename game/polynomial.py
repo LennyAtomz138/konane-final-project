@@ -82,18 +82,15 @@ class DenialOfOccupancy():
         self._c = c
 
     def eval(self, state):
-        b = str(state.board())
-        black = 0
-        white = 0
-        for i in b:
-            if i == '■':
-                black += 1
-            elif i == '□':
-                white += 1
-        if str(state.color())[-5:] == "white":
-            return black - white
-        else:
-            return white - black
+        states = list(state.moves())
+        for m in states:
+            newState = state + m
+            total += len(list(newState.moves()))
+
+    if str(state.color())[-5:] == "white":
+        return len(states) - total
+    else:
+        return total - len(states)
 
     def coeff(self):
         return self._c
