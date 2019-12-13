@@ -67,6 +67,11 @@ class Mobility():
         self._c = c
 
     def eval(self, state):
+        # occupied = state.board().n_occupied()
+        # value = 1
+        # if occupied % 2 == 0:
+        #     value = len(list(state.moves()))
+        # return value
         return len(list(state.moves()))
 
     def coeff(self):
@@ -82,6 +87,8 @@ class DenialOfOccupancy():
         self._c = c
 
     def eval(self, state):
+        occupied = state.board().n_occupied()
+        value = 1
         states = list(state.moves())
         total = 0
         for m in states:
