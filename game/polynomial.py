@@ -67,7 +67,7 @@ class Mobility():
         self._c = c
 
     def eval(self, state):
-        return len(list(state.moves()))
+        return state.numMoves()
 
     def coeff(self):
         return self._c
@@ -82,7 +82,7 @@ class DenialOfOccupancy():
         self._c = c
 
     def eval(self, state):
-        states = list(state.moves())
+        """states = list(state.moves())
         total = 0
         for m in states:
             newState = state + m
@@ -91,7 +91,8 @@ class DenialOfOccupancy():
         if str(state.color())[-5:] == "white":
             return len(states) - total
         else:
-            return total - len(states)
+            return total - len(states)"""
+        return 5
 
     def coeff(self):
         return self._c
