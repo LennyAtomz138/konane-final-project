@@ -63,15 +63,16 @@ class AIPlayer(Player):
         if learn:
             self._name = "Learner"
             prev = pickle.load(open('Memory/polynomial.data', 'rb')).printCoeff()
-            self._polynomial = Polynomial([PieceAdv(random.uniform(prev[0][1]-.5, prev[0][1]+.5)),
-                                        Mobility(random.uniform(prev[1][1]-.5, prev[1][1]+.5))], [])
+            self._polynomial = Polynomial([PieceAdv(random.uniform(prev[0][1]-.25, prev[0][1]+.25)),
+                                        Mobility(random.uniform(prev[1][1]-.25, prev[1][1]+.25)),
+                                        DenialOfOccupancy(random.uniform(prev[2][1]-.25, prev[2][1]+.25))], [])
             self._path = []
         else:
             self._name = "Motley Crew"
             self._polynomial = pickle.load(open('Memory/polynomial.data', 'rb'))
 
     # Returns the best-worst-case (next move, score)
-    def _minimax(self, curState, depth=4, alpha=-math.inf, beta=math.inf, maxPlayer=True):
+    def _minimax(self, curState, depth=2, alpha=-math.inf, beta=math.inf, maxPlayer=True):
         if depth == 0 or curState.is_loss():
             return None, self._polynomial.evaluate(curState)
         elif maxPlayer:
@@ -185,6 +186,7 @@ class NetworkPlayer(Player):
             if choice in s:
                 index = options.index(s)
         if index == []:
+            print(choice)
             print("Could not find Opponent's move.....")
         return moves[index]
 
