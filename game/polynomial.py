@@ -35,7 +35,7 @@ class Polynomial:
         array = []
         for c in self._active:
             array.append((c.name(), c.coeff()))
-        print(array)
+        #print(array)
         return array
 
     def switchOut(self):
@@ -83,9 +83,9 @@ Refer to it when defining these functions"""
 """ TODO: implement eval() for each term. Given a state, return the "score" for the board based on the
 conditions of the term"""
 class PieceAdv():
-    def __init__(self):
+    def __init__(self, c):
         self._id = "pieceAdv"
-        self._c = 1
+        self._c = c
 
     def eval(self, state, dom):
         sign = 1
@@ -108,9 +108,9 @@ class PieceAdv():
         return self._id
 
 class Mobility():
-    def __init__(self):
+    def __init__(self, c):
         self._id = "mobility"
-        self._c = 1
+        self._c = c
 
     def eval(self, state, dom):
         sign = 1

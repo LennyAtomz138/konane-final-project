@@ -39,12 +39,13 @@ class Game:
     scores. For each delta, determine which terms in the current polynomial lead to its underestimating/
     overestimating, and adjust those term's coefficients as necessary """
     def reward(self, player):
-        playerPath = player.getPath()
-        curPolynomial = pickle.load(open('Memory/polynomial.data', 'rb'))
-        # modify the polynomial as needed here
-        print(str(player))
-        print(curPolynomial.printCoeff())
-        # pickle.dump(newPolynomial, open('../Memory/polynomial.data', 'wb'))
+        # playerPath = player.getPath()
+        # curPolynomial = pickle.load(open('Memory/polynomial.data', 'rb'))
+        # # modify the polynomial as needed here
+        # print(str(player))
+        # print(curPolynomial.printCoeff())
+        newPolynomial = player.getPoly()
+        pickle.dump(newPolynomial, open('Memory/polynomial.data', 'wb'))
         pass
 
     def run_all(self):
