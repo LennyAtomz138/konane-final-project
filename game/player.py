@@ -19,17 +19,17 @@ def encode_for_server(arg):
         res = arg.split('->')
         print("Moving encoding:")
         print(res)
-        #['(3, a) ', ' (1, a)']
-        p1 = tuple(map(str, res[0].replace(' ','')[1:-1].split(',')))
-        p2 = tuple(map(str, res[1].replace(' ','')[1:-1].split(',')))
+        # ['(3, a) ', ' (1, a)']
+        p1 = tuple(map(str, res[0].replace(' ', '')[1:-1].split(',')))
+        p2 = tuple(map(str, res[1].replace(' ', '')[1:-1].split(',')))
         return "[" + str(int(p1[0]) - 1) + ":" + str(cols.index(p1[1])) + "]" + ":" + "[" + str(
             int(p2[0]) - 1) + ":" + str(cols.index(p2[1])) + "]"
     else:
         res = arg[7:]
         print("Removing encoding:")
         print(res)
-        #(1, a)
-        p1 = tuple(map(str, res.replace(' ','')[1:-1].split(',')))
+        # (1, a)
+        p1 = tuple(map(str, res.replace(' ', '')[1:-1].split(',')))
         return "[" + str(int(p1[0]) - 1) + ":" + str(cols.index(p1[1])) + "]"
 
 
@@ -38,7 +38,7 @@ def decode_from_server(arg):
         res = arg[4:]
         print("Moving decoding:")
         print(res)
-        #[2:0]:[0:0]
+        # [2:0]:[0:0]
         res = res.replace("]:[", "],[").split(",")
         p1 = json.loads(res[0].replace(":", ","))
         p2 = json.loads(res[1].replace(":", ","))
@@ -49,7 +49,7 @@ def decode_from_server(arg):
         res = arg[8:]
         print("Removing decoding:")
         print(res)
-        #[0:0]
+        # [0:0]
         p1 = json.loads(res.replace(":", ","))
         return "(" + str(int(p1[0]) + 1) + ", " + cols[int(p1[1])] + ")"
 
@@ -57,15 +57,15 @@ def decode_from_server(arg):
 # Gets next move via Minimax and knowledge base
 # Learning AIs keep track of path (state, score) for reward later
 class AIPlayer(Player):
-    def __init__(self, connection = None, learn = True):
+    def __init__(self, connection=None, learn=True):
         self.tn = connection
         self._learn = learn
         if learn:
             self._name = "Learner"
             prev = pickle.load(open('Memory/polynomial.data', 'rb')).printCoeff()
-            self._polynomial = Polynomial([PieceAdv(random.uniform(prev[0][1]-.25, prev[0][1]+.25)),
-                                        Mobility(random.uniform(prev[1][1]-.25, prev[1][1]+.25)),
-                                        DenialOfOccupancy(random.uniform(prev[2][1]-.25, prev[2][1]+.25))], [])
+            self._polynomial = Polynomial([PieceAdv(random.uniform(prev[0][1] - .25, prev[0][1] + .25)),
+                                           Mobility(random.uniform(prev[1][1] - .25, prev[1][1] + .25)),
+                                           DenialOfOccupancy(random.uniform(prev[2][1] - .25, prev[2][1] + .25))], [])
             self._path = []
         else:
             self._name = "Motley Crew"
@@ -138,6 +138,7 @@ class AIPlayer(Player):
     def __str__(self):
         return self._name
 
+
 # Gets next move from network
 class NetworkPlayer(Player):
     def __init__(self, connection, start=None):
@@ -185,13 +186,14 @@ class NetworkPlayer(Player):
         for s in options:
             if choice in s:
                 index = options.index(s)
-        if index == []:
+        if not index:
             print(choice)
             print("Could not find Opponent's move.....")
         return moves[index]
 
-        def __str__(self):
-            return self._name
+    def __str__(self):
+        return self._name
+
 
 # Gets next move from user input
 class HumanPlayer(Player):
