@@ -84,7 +84,7 @@ class DenialOfOccupancy():
 
     def eval(self, state):
         occupied = state.board().n_occupied()
-        if occupied < 50:
+        if occupied < 150:
             value = 1
             states = list(state.moves())
             total = 0
