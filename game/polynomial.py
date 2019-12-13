@@ -87,10 +87,10 @@ class DenialOfOccupancy():
             newState = state + m
             total += len(list(newState.moves()))
 
-    if str(state.color())[-5:] == "white":
-        return len(states) - total
-    else:
-        return total - len(states)
+        if str(state.color())[-5:] == "white":
+            return len(states) - total
+        else:
+            return total - len(states)
 
     def coeff(self):
         return self._c
