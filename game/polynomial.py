@@ -91,10 +91,7 @@ class DenialOfOccupancy():
                 newState = state + m
                 total += newState.numMoves()
 
-            if str(state.color())[-5:] == "white":
-                return state.numMoves() - total
-            else:
-                return total - state.numMoves()
+            return state.numMoves() - total
         else:
             return 1
 
