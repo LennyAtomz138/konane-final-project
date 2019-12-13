@@ -10,22 +10,8 @@ class Polynomial:
 
     def evaluate(self, state):
         #color = [1,0][state.color()] # If it's black's turn to move, then white chose the move to get to this state
-        value = 0
-        b = str(state.board())
-        black = 0
-        white = 0
-        dom = 0
-        for i in b:
-            if i == '■':
-                black += 1
-            elif i == '□':
-                white += 1
-        if black > white:
-            dom = ("black", black)
-        else:
-            dom = ("white", white)
         for t in self._active:
-            value += t.coeff() * t.eval(state, dom)
+            value += t.coeff() * t.eval(state)
         return value
 
     def printCoeff(self):
@@ -82,20 +68,19 @@ class PieceAdv():
         self._id = "pieceAdv"
         self._c = c
 
-    def eval(self, state, dom):
-        sign = 1
-        if str(state.color())[-5:] == "white" and dom[0] == "white":
-            sign = -1
-        elif  str(state.color())[-5:] == "black" and dom[0] == "black":
-            sign = -1
-        rem = state.board().n_removed()
-        value = 1
-        if rem < 145:
-            value = rem
+    def eval(self, state):
+        b = str(state.board())
+        black = 0
+        white = 0
+        for i in b:
+            if i == '■':
+                black += 1
+            elif i == '□':
+                white += 1
+        if str(state.color())[-5:] == "white":
+            return black - white
         else:
-            value = state.board().n_occupied() - 37
-        return sign * rem
-
+            return white - black
     def coeff(self):
         return self._c
 
@@ -107,12 +92,7 @@ class Mobility():
         self._id = "mobility"
         self._c = c
 
-    def eval(self, state, dom):
-        sign = 1
-        if str(state.color())[-5:] == "white" and dom[0] == "white":
-            sign = -1
-        elif  str(state.color())[-5:] == "black" and dom[0] == "black":
-            sign = -1
+    def eval(self, state):
         rem = state.board().n_removed()
         value = 1
         if rem > 250:
@@ -124,6 +104,23 @@ class Mobility():
 
     def name(self):
         return self._id
+# class Dom():
+#     def __init__(self, c):
+#         self._id = "dom"
+#         self._c = c
+#
+#     def eval(self, state):
+#         rem = state.board().n_removed()
+#         value = 1
+#         if rem > 250:
+#             value = len(list(state.moves()))
+#         return sign * value
+#
+#     def coeff(self):
+#         return self._c
+#
+#     def name(self):
+#         return self._id
 
 # class DenialOfOccupancy(Term):
 #     def __init__(self):
